@@ -1,17 +1,15 @@
-<script lang="ts">
-export default {
-  name: 'HeaderNav',
-}
+<script setup lang="ts">
+import NavLink from './NavLink.vue'
 </script>
 
 <template>
   <nav className="fs-nav">
     <ul>
       <li>
-        <a href="/">Home</a>
+        <NavLink href="/">Home</NavLink>
       </li>
       <li>
-        <a href="/about-us">About us</a>
+        <NavLink href="/about-us">About us</NavLink>
       </li>
     </ul>
   </nav>

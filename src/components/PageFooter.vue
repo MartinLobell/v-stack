@@ -1,8 +1,4 @@
-<script lang="ts">
-export default {
-  name: 'PageFooter',
-}
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <footer className="fs-footer">

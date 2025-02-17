@@ -1,11 +1,5 @@
-<script lang="ts">
+<script setup lang="ts">
 import HeaderNav from './HeaderNav.vue'
-export default {
-  name: 'PageHeader',
-  components: {
-    HeaderNav,
-  },
-}
 </script>
 
 <template>
@@ -33,6 +27,7 @@ export default {
   .fs-site-title {
     display: flex;
     align-items: center;
+    font-weight: 700;
   }
 }
 </style>
