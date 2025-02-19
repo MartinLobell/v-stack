@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import HeaderNav from './HeaderNav.vue'
+import NavLink from '../NavLink.vue'
 </script>
 
 <template>
   <header className="fs-header">
     <div className="fs-site-title" role="heading" aria-level="1">
-      <a href="/">FullstackJS Arcade</a>
+      <NavLink :notActive="true" href="/">FullstackJS Arcade</NavLink>
     </div>
     <HeaderNav />
   </header>

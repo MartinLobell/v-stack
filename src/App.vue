@@ -1,17 +1,14 @@
 <script setup lang="ts">
-import HomePage from './home/HomePage.vue'
-import FullstackleGame from './fullstackle-game/FullstackleGame.vue'
-import PageHeader from './components/PageHeader.vue'
-import SideNav from './components/SideNav.vue'
-import PageFooter from './components/PageFooter.vue'
+import PageHeader from './components/header/PageHeader.vue'
+import SideNav from './components/sidenav/SideNav.vue'
+import PageFooter from './components/footer/PageFooter.vue'
 </script>
 
 <template>
   <PageHeader />
   <SideNav />
   <main class="fs-main">
-    <HomePage />
-    <FullstackleGame />
+    <router-view />
   </main>
   <PageFooter />
 </template>
