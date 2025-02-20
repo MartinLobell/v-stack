@@ -1,20 +1,23 @@
 <script setup lang="ts">
-import { defineProps, computed } from 'vue'
+import { defineProps, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 const props = defineProps<{
   href: string
   notActive?: boolean
 }>()
 
-const isActive = computed(() => {
-  if (props.notActive) {
-    return false
-  }
-  if (props.href === '/') {
-    return window.location.pathname === props.href
-  }
-  return window.location.pathname.includes(props.href)
-})
+const isActive = ref(false)
+const route = useRoute()
+
+watch(
+  () => [props.href, route.path],
+  () => {
+    isActive.value =
+      props.href === '/' ? route.path === props.href : route.path.includes(props.href)
+  },
+  { immediate: true },
+)
 </script>
 
 <template>

@@ -15,7 +15,7 @@ import PageFooter from './components/footer/PageFooter.vue'
 
 <style scoped lang="scss">
 .fs-main {
-  padding: 52px 220px;
+  padding: 52px 16rem;
   display: flex;
   flex-direction: column;
   align-items: center;
