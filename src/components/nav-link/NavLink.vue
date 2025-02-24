@@ -2,7 +2,7 @@
   <router-link
     :to="props.href"
     class="nav-link"
-    :class="[{ active: isActive }, { 'not-active': props.notActive }]"
+    :class="[{ active: isActive }, { logo: props.isLogo }]"
   >
     <slot></slot>
   </router-link>
@@ -14,7 +14,7 @@ import { useRoute } from 'vue-router'
 
 const props = defineProps<{
   href: string
-  notActive?: boolean
+  isLogo?: boolean
 }>()
 
 const isActive = ref(false)
@@ -23,7 +23,7 @@ const route = useRoute()
 watch(
   () => [props.href, route.path],
   () => {
-    if (props.notActive === true) {
+    if (props.isLogo === true) {
       isActive.value = false
     } else {
       isActive.value =
@@ -42,9 +42,10 @@ watch(
     transition: 0.2s;
     color: rgb(255, 204, 0);
   }
-  .not-active {
+  &.logo {
+    font-size: 24px !important;
     &:hover {
-      color: #000 !important;
+      color: #000;
     }
   }
   &.active {

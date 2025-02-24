@@ -51,6 +51,10 @@ const handleSubmit = (option: string | Event) => {
   }
   isOpen.value = false
   inputValue.value = ''
+  const inputElement = document.querySelector('.fs-input') as HTMLInputElement
+  if (inputElement) {
+    inputElement.focus()
+  }
 }
 
 const filterOptions = () => {
@@ -71,8 +75,7 @@ const filterOptions = () => {
 .fs-fullstackle-form {
   width: 50%;
 
-  .fs-fullstackle-form-field {
-    border: none;
+  &-field {
     display: flex;
     flex-direction: row;
     .fs-input {
@@ -81,8 +84,8 @@ const filterOptions = () => {
       font-size: 16px;
       font-weight: 600;
 
-      &:focus-visible {
-        outline: none;
+      &:focus {
+        outline: #000 solid 2px;
       }
     }
   }

@@ -1,5 +1,9 @@
 <template>
-  <button @click="onClick()" class="fs-button" :class="[btnClass, { disabled: disabled }]">
+  <button
+    @click="onClick()"
+    class="fs-button"
+    :class="[{ small: small }, btnClass, { disabled: disabled }]"
+  >
     <slot></slot>
   </button>
 </template>
@@ -25,6 +29,11 @@ defineProps({
     validator: (value: string) => ['primary', 'secondary'].includes(value),
     required: true,
   },
+  small: {
+    type: Boolean,
+    default: false,
+    required: false,
+  },
 })
 </script>
 
@@ -33,7 +42,7 @@ defineProps({
   border: none;
   border-radius: 10px;
   padding: 0.75rem;
-  width: 85%;
+  width: 100%;
   margin: 0.5rem 0;
   font-weight: 700;
   cursor: pointer;
@@ -51,6 +60,15 @@ defineProps({
       transition: 0.2s;
       opacity: 0.8;
     }
+  }
+  &.small {
+    width: 50%;
+    padding: 0.75rem;
+    font-size: 12px;
+  }
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 </style>

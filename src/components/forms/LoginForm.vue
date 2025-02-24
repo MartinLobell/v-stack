@@ -10,7 +10,13 @@
       type="email"
     />
     <label for="fs-login-password">Password</label>
-    <input id="fs-login-password" class="fs-login-input" label="Password" type="password" />
+    <input
+      placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"
+      id="fs-login-password"
+      class="fs-login-input"
+      label="Password"
+      type="password"
+    />
     <div class="fs-btn-section">
       <FsButton
         @click="
@@ -37,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import FsButton from '@/components/button/FsButton.vue'
+import FsButton from '../../components/button/FsButton.vue'
 </script>
 
 <style scoped lang="scss">
