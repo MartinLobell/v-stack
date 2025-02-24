@@ -1,5 +1,5 @@
 <template>
-  <div className="fs-modal-backdrop">
+  <div className="fs-modal-backdrop" @click="emitCloseModal()">
     <div className="fs-modal">
       <div>
         <h2 className="fs-modal-title">You won!</h2>

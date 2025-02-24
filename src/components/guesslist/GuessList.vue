@@ -70,6 +70,11 @@ watch(
       color: #ffd900;
       text-align: center;
       font-weight: 600;
+      .fs-tablerow {
+        .fs-tabledata {
+          padding: 10px;
+        }
+      }
     }
     .fs-tablebody {
       background-color: #ffd900;

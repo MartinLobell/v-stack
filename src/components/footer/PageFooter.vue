@@ -8,11 +8,18 @@
 
 <style scoped lang="scss">
 .fs-footer {
-  width: 100vw !important;
+  width: 100vw;
+  right: 0;
+  left: 0;
   bottom: 0;
   text-align: center;
-  position: absolute;
+  margin: 0;
   width: auto;
   background-color: #f3f3f3;
+  padding: 1rem 0;
+  z-index: 1;
+  p {
+    margin: 0;
+  }
 }
 </style>

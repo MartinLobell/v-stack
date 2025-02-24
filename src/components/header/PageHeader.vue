@@ -22,7 +22,7 @@ import NavLink from '../NavLink.vue'
   box-sizing: border-box;
   z-index: 1;
   background-color: #f3f3f3;
-  position: fixed;
+  position: absolute;
   padding: 0 30px;
 
   .fs-site-title {

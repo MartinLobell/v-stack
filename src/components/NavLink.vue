@@ -1,3 +1,13 @@
+<template>
+  <router-link
+    :to="props.href"
+    class="nav-link"
+    :class="[{ active: isActive }, { 'not-active': props.notActive }]"
+  >
+    <slot></slot>
+  </router-link>
+</template>
+
 <script setup lang="ts">
 import { defineProps, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -13,18 +23,16 @@ const route = useRoute()
 watch(
   () => [props.href, route.path],
   () => {
-    isActive.value =
-      props.href === '/' ? route.path === props.href : route.path.includes(props.href)
+    if (props.notActive === true) {
+      isActive.value = false
+    } else {
+      isActive.value =
+        props.href === '/' ? route.path === props.href : route.path.includes(props.href)
+    }
   },
   { immediate: true },
 )
 </script>
-
-<template>
-  <router-link :to="props.href" class="nav-link" :class="{ active: isActive }">
-    <slot></slot>
-  </router-link>
-</template>
 
 <style scoped lang="scss">
 .nav-link {
@@ -33,6 +41,11 @@ watch(
   &:hover {
     transition: 0.2s;
     color: rgb(255, 204, 0);
+  }
+  .not-active {
+    &:hover {
+      color: #000 !important;
+    }
   }
   &.active {
     color: rgb(255, 204, 0);

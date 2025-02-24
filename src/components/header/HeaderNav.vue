@@ -9,6 +9,9 @@ import NavLink from '../NavLink.vue'
         <NavLink href="/">Home</NavLink>
       </li>
       <li>
+        <NavLink href="/fullstackle-game">Fullstackle</NavLink>
+      </li>
+      <li>
         <NavLink href="/about-us">About us</NavLink>
       </li>
     </ul>

@@ -12,13 +12,33 @@
     <label for="fs-login-password">Password</label>
     <input id="fs-login-password" class="fs-login-input" label="Password" type="password" />
     <div class="fs-btn-section">
-      <button type="submit">Login</button>
-      <button type="button">Switch</button>
+      <FsButton
+        @click="
+          () => {
+            console.log('Login')
+          }
+        "
+        type="submit"
+        btnClass="primary"
+        >Login</FsButton
+      >
+      <FsButton
+        @click="
+          () => {
+            console.log('Switch')
+          }
+        "
+        type="button"
+        btnClass="secondary"
+        >Switch</FsButton
+      >
     </div>
   </form>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import FsButton from '@/components/button/FsButton.vue'
+</script>
 
 <style scoped lang="scss">
 .fs-login-signup-form {
@@ -55,16 +75,6 @@
 
   .fs-btn-section {
     margin: 2rem 0 1rem 0;
-
-    button {
-      width: 85%;
-      padding: 0.75rem;
-      margin: 0.5rem 0;
-      border: none;
-      background-color: #ffd900;
-      font-weight: 700;
-      cursor: pointer;
-    }
   }
 }
 </style>
