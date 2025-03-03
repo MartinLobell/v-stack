@@ -6,7 +6,7 @@ import NavLink from '../nav-link/NavLink.vue'
 <template>
   <header className="fs-header">
     <div className="fs-site-title" role="heading" aria-level="1">
-      <NavLink isLogo href="/">Vüllstack</NavLink>
+      <NavLink logo notActive href="/">Vüllstack</NavLink>
     </div>
     <HeaderNav />
   </header>

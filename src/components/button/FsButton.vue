@@ -1,40 +1,30 @@
 <template>
   <button
-    @click="onClick()"
+    :type="props.type"
+    :disabled="props.disabled"
+    @click="
+      props.onClick
+        ? props.onClick()
+        : () => {
+            return
+          }
+    "
     class="fs-button"
-    :class="[{ small: small }, btnClass, { disabled: disabled }]"
+    :class="[{ small: props.small }, props.btnClass, { disabled: props.disabled }]"
   >
     <slot></slot>
   </button>
 </template>
 
 <script setup lang="ts">
-defineProps({
-  type: {
-    type: String,
-    validator: (value: string) => ['submit', 'button', 'reset'].includes(value),
-    required: true,
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-    required: false,
-  },
-  onClick: {
-    type: Function,
-    required: true,
-  },
-  btnClass: {
-    type: String,
-    validator: (value: string) => ['primary', 'secondary'].includes(value),
-    required: true,
-  },
-  small: {
-    type: Boolean,
-    default: false,
-    required: false,
-  },
-})
+interface ButtonProps {
+  type: 'submit' | 'button' | 'reset'
+  disabled?: boolean
+  onClick?: () => void
+  btnClass: 'primary' | 'secondary'
+  small?: boolean
+}
+const props = defineProps<ButtonProps>()
 </script>
 
 <style scoped lang="scss">
@@ -46,19 +36,19 @@ defineProps({
   margin: 0.5rem 0;
   font-weight: 700;
   cursor: pointer;
-  &.primary {
+  &.secondary {
     background-color: rgb(255, 204, 0);
     color: #000;
     &:hover {
       outline: 2px solid #000;
     }
   }
-  &.secondary {
+  &.primary {
     background-color: #000;
     color: rgb(255, 204, 0);
     &:hover {
       transition: 0.2s;
-      opacity: 0.8;
+      opacity: 0.6;
     }
   }
   &.small {

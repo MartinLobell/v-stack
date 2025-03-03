@@ -1,0 +1,17 @@
+[
+  {
+    "uid": 1,
+    "email": "martin.lobell@capgemini.com",
+    "password": "password"
+  },
+  {
+    "uid": 2,
+    "email": "ermin.bejtula@capgemini.com",
+    "password": "password"
+  },
+  {
+    "uid": 3,
+    "email": "victor.johnson@capgemini.com",
+    "password": "password"
+  }
+]

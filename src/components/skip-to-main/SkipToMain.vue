@@ -16,16 +16,17 @@ const skipToMain = () => {
 <style lang="scss" scoped>
 .skip-to-main {
   position: absolute;
-  top: -60px;
+  top: -70px;
   left: 20px;
   background: #ffd900;
-  border: solid 0.5rem #000;
+  border: solid 0.25rem #000;
   color: #000;
-  padding: 8px;
+  padding: 1rem;
   z-index: 100;
   &:focus {
     transition: 0.2s;
     top: 20px;
+    text-decoration: underline;
   }
 }
 </style>

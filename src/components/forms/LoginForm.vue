@@ -1,42 +1,26 @@
 <template>
-  <form class="fs-login-signup-form">
-    <h2 class="fs-form-h2">Login</h2>
-    <label for="fs-login-email">Email</label>
-    <input
+  <form class="fs-login-signup-form" @submit="handleSubmit">
+    <h2 class="fs-form-h2">{{ isLogin ? 'Log in' : 'Sign up' }}</h2>
+    <InputField
+      inputLabel="Email"
       placeholder="name@example.com"
       id="fs-login-email"
       class="fs-login-input"
-      label="Email"
       type="email"
+      v-model="email"
     />
-    <label for="fs-login-password">Password</label>
-    <input
-      placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"
+    <InputField
+      inputLabel="Password"
+      placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
       id="fs-login-password"
       class="fs-login-input"
-      label="Password"
       type="password"
+      v-model="password"
     />
     <div class="fs-btn-section">
-      <FsButton
-        @click="
-          () => {
-            console.log('Login')
-          }
-        "
-        type="submit"
-        btnClass="primary"
-        >Login</FsButton
-      >
-      <FsButton
-        @click="
-          () => {
-            console.log('Switch')
-          }
-        "
-        type="button"
-        btnClass="secondary"
-        >Switch</FsButton
+      <FsButton type="submit" btnClass="primary">{{ isLogin ? 'Login' : 'Register' }}</FsButton>
+      <FsButton @click="() => (isLogin = !isLogin)" type="button" btnClass="secondary"
+        >Switch to {{ !isLogin ? 'login' : 'register' }}</FsButton
       >
     </div>
   </form>
@@ -44,6 +28,26 @@
 
 <script setup lang="ts">
 import FsButton from '../../components/button/FsButton.vue'
+import InputField from '../inputfield/InputField.vue'
+import { useSessionStore } from '@/stores/sessionStore'
+import { ref } from 'vue'
+const sessionStore = useSessionStore()
+const email = ref('')
+const password = ref('')
+const isLogin = ref(true)
+
+const handleSubmit = (e: Event) => {
+  e.preventDefault()
+  if (!email.value || !password.value) {
+    alert('Please fill in all fields')
+    return
+  }
+  if (isLogin.value) {
+    sessionStore.login(email.value, password.value)
+  } else {
+    sessionStore.register(email.value, password.value)
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -61,22 +65,6 @@ import FsButton from '../../components/button/FsButton.vue'
 
   .fs-form-h2 {
     margin: 0 0 0rem 0;
-  }
-
-  label {
-    font-size: 16px;
-    text-align: start;
-  }
-
-  .fs-login-input {
-    flex-grow: 2;
-    padding: 0.5rem;
-    font-size: 16px;
-    font-weight: 400;
-
-    &:focus-visible {
-      outline: none;
-    }
   }
 
   .fs-btn-section {
