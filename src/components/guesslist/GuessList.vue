@@ -1,5 +1,10 @@
 <template>
-  <WinModal v-if="openModal" @close-modal="closeModal" :characterName="correctName" />
+  <TurnoutModal
+    won
+    v-if="openModal"
+    @close-modal="closeModal"
+    :characterName="characterStore.charOfTheDay.name"
+  />
   <div className="fs-table-container">
     <table className="fs-table">
       <thead className="fs-tablehead">
@@ -13,7 +18,7 @@
           <th key="joinedfullstack" className="fs-tabledata">Joined fullstack</th>
         </tr>
       </thead>
-      <tbody className="fs-tablebody}" v-if="characterStore.guessedCharacters">
+      <tbody class="fs-tablebody" v-if="characterStore.guessedCharacters">
         <template v-for="(character, index) in characterStore.guessedCharacters" :key="index">
           <GuessRow :character="character" :charOfTheDay="characterStore.charOfTheDay" />
         </template>
@@ -25,14 +30,15 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import GuessRow from './GuessRow.vue'
-import WinModal from '@/components/modals/WinModal.vue'
+import TurnoutModal from '@/components/modals/TurnoutModal.vue'
 import { useCharacterStore } from '@/stores/characterStore'
 import { useFullstackleStore } from '@/stores/fullstackleStore'
+import { useSessionStore } from '@/stores/sessionStore'
 import type { Character } from '@/types/Character'
 const characterStore = useCharacterStore()
 const fullstackleStore = useFullstackleStore()
+const sessionStore = useSessionStore()
 const openModal = ref(false)
-const correctName = ref<string>('')
 
 const closeModal = () => {
   openModal.value = !openModal.value
@@ -41,14 +47,16 @@ const closeModal = () => {
 watch(
   () => characterStore.guessedCharacters as Character[],
   (newCharArr: Character[]) => {
-    console.log('charOfTheDay: ', characterStore.charOfTheDay)
-
+    const latestGuess: Character = newCharArr[newCharArr.length - 1]
     if (newCharArr.length > 0) {
-      const latestGuess: Character = newCharArr[newCharArr.length - 1]
-      fullstackleStore.checkIfWon(latestGuess.name === characterStore.charOfTheDay.name)
-      correctName.value = latestGuess.name
+      fullstackleStore.checkTurnout(
+        latestGuess.name === characterStore.charOfTheDay.name,
+        sessionStore.user,
+        newCharArr.length,
+      )
       setTimeout(() => {
-        openModal.value = latestGuess.name === characterStore.charOfTheDay.name
+        openModal.value =
+          latestGuess.name === characterStore.charOfTheDay.name || newCharArr.length > 2
       }, 1000)
     }
   },

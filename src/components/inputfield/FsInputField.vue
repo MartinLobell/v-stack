@@ -3,7 +3,7 @@
     <div class="fs-fullstackle-form-field">
       <input
         class="fs-input"
-        :disabled="fullstackleStore.hasWon"
+        :disabled="fullstackleStore.hasWon || fullstackleStore.hasLost"
         type="text"
         v-model="inputValue"
         @input="

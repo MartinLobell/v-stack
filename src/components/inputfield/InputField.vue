@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
 interface Props {
   id: string
   inputLabel?: string

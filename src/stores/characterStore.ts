@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { Character } from '@/types/Character'
 import { onMounted } from 'vue'
-import fetchChars from '@/api/getData'
+import { fetchChars } from '@/api/getData'
 
 export const useCharacterStore = defineStore('character', () => {
   const characters = ref<Character[]>([])

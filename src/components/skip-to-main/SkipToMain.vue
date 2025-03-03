@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 const skipToMain = () => {
-  const main = document.querySelector('main')
+  const main = document.getElementsByTagName('main')[0]
   if (main) {
     main.focus()
   }

@@ -57,6 +57,7 @@ defineProps<{
     padding: 10px;
     display: table-cell;
     width: calc(100% / var(--column-count));
+    overflow: hidden;
     &.correct_attribute {
       background-color: rgb(139, 170, 0);
     }
