@@ -18,21 +18,26 @@ export const fetchChars = async (): Promise<Character[]> => {
   }
 }
 
-export const fetchUser = async (email: string, password?: string): Promise<User> => {
-  let user: User = {} as User
+export const fetchUser = async (
+  email: string,
+  isLoggedIn: boolean,
+  password?: string,
+): Promise<User | null> => {
+  let user: User | null = null
   try {
     const querySnapshot = await getDocs(collection(db, 'users'))
     querySnapshot.forEach((doc) => {
-      const data = doc.data()
-      console.log('Här! -> ' + JSON.stringify(doc))
-      if (data.email === email && data.password === password) {
-        user = data as User
+      const data = doc.data() as User
+      if (data.email === email) {
+        if (isLoggedIn || (password && data.password === password)) {
+          user = data
+        }
       }
     })
   } catch (error) {
-    console.error('Error fetching characters:', error)
+    console.error('Error fetching user:', error)
     // TODO: send errors
-    throw new Error('Failed to fetch characters')
+    throw new Error('Failed to fetch user')
   }
   return user
 }
@@ -61,7 +66,6 @@ export const registerUser = async (email: string, password: string): Promise<voi
         playedGames: 0,
       },
     })
-    console.log('User registered successfully')
   } catch (error) {
     console.error('Error registering user:', error)
     // TODO: send errors
@@ -69,7 +73,11 @@ export const registerUser = async (email: string, password: string): Promise<voi
   }
 }
 
-export const updateFullstackleStats = async (user: User, newGuesses: number): Promise<void> => {
+export const updateFullstackleStats = async (
+  user: User,
+  newGuesses: number,
+  won: boolean,
+): Promise<void> => {
   try {
     const querySnapshot = await getDocs(collection(db, 'users'))
     let userRef = null
@@ -86,10 +94,8 @@ export const updateFullstackleStats = async (user: User, newGuesses: number): Pr
     await updateDoc(userRef, {
       'fullstackleStats.playedGames': user.fullstackleStats.playedGames + 1,
       'fullstackleStats.guesses': user.fullstackleStats.guesses + newGuesses,
-      'fullstackleStats.wins': user.fullstackleStats.wins + 1,
-      // TODO: Only append to wins if won
+      'fullstackleStats.wins': user.fullstackleStats.wins + (won ? 1 : 0),
     })
-    console.log('User stats updated successfully')
   } catch (error) {
     console.error('Error updating user stats:', error)
     // TODO: send errors

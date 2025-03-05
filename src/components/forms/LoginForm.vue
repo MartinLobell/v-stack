@@ -5,7 +5,6 @@
       inputLabel="Email"
       placeholder="name@example.com"
       id="fs-login-email"
-      class="fs-login-input"
       type="email"
       v-model="email"
     />
@@ -13,7 +12,6 @@
       inputLabel="Password"
       placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
       id="fs-login-password"
-      class="fs-login-input"
       type="password"
       v-model="password"
     />

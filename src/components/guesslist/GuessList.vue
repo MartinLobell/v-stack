@@ -42,6 +42,7 @@ const openModal = ref(false)
 
 const closeModal = () => {
   openModal.value = !openModal.value
+  console.log()
 }
 
 watch(
@@ -54,9 +55,10 @@ watch(
         sessionStore.user,
         newCharArr.length,
       )
+      console.log(sessionStore.user.fullstackleStats)
       setTimeout(() => {
         openModal.value =
-          latestGuess.name === characterStore.charOfTheDay.name || newCharArr.length > 2
+          latestGuess.name === characterStore.charOfTheDay.name || fullstackleStore.hasLost
       }, 1000)
     }
   },
@@ -85,7 +87,6 @@ watch(
       }
     }
     .fs-tablebody {
-      background-color: #ffd900;
       font-weight: 400;
       font-size: 14px;
     }

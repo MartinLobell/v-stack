@@ -10,32 +10,10 @@
           the day!
         </p>
         <h3>It was {{ characterName }}!</h3>
-        <table>
-          <tbody>
-            <tr>
-              <th>Played rounds</th>
-              <td>{{ userStats.playedGames }}</td>
-            </tr>
-            <tr>
-              <th>Wins</th>
-              <td>{{ userStats.wins }}</td>
-            </tr>
-            <tr>
-              <th>Win rate</th>
-              <td>{{ (userStats.playedGames / userStats.wins).toFixed(2) }}%</td>
-            </tr>
-            <tr>
-              <th>Guesses</th>
-              <td>{{ userStats.guesses }}</td>
-            </tr>
-            <tr>
-              <th>Guess rate</th>
-              <td>{{ (userStats.wins / userStats.guesses).toFixed(2) }}%</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
-      <button className="fs-modal-button" @click="emitCloseModal()">Close</button>
+      <StatsTable v-if="fullstackleStore.hasWon || fullstackleStore.hasLost" />
+
+      <FsButton type="button" btnClass="primary" @click="emitCloseModal()">Close</FsButton>
     </div>
   </div>
 </template>
@@ -43,14 +21,22 @@
 <script setup lang="ts">
 import { useFullstackleStore } from '@/stores/fullstackleStore'
 import { useSessionStore } from '@/stores/sessionStore'
-import { ref } from 'vue'
+import { computed, onMounted } from 'vue'
+import StatsTable from '@/components/stats-table/StatsTable.vue'
+import FsButton from '@/components/button/FsButton.vue'
+
 defineProps<{
   characterName: string
 }>()
 const fullstackleStore = useFullstackleStore()
 const sessionStore = useSessionStore()
 const emit = defineEmits(['close-modal'])
-const userStats = ref(sessionStore.user.fullstackleStats)
+
+const userStats = computed(() => sessionStore.user.fullstackleStats)
+
+onMounted(() => {
+  console.log(userStats.value)
+})
 
 const emitCloseModal = () => {
   emit('close-modal')
@@ -74,7 +60,7 @@ const emitCloseModal = () => {
     background-color: #fff;
     border-radius: 8px;
     width: 300px;
-    height: 300px;
+    height: auto;
     padding: 40px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1001;

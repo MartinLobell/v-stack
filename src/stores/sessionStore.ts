@@ -10,7 +10,7 @@ export const useSessionStore = defineStore('userSession', () => {
 
   const login = async (email: string, password: string) => {
     try {
-      const fetchedUser: User = await fetchUser(email, password)
+      const fetchedUser: User | null = await fetchUser(email, false, password)
       if (fetchedUser !== null) {
         isLoggedIn.value = true
         user.value = fetchedUser
@@ -41,10 +41,14 @@ export const useSessionStore = defineStore('userSession', () => {
     }
   }
 
-  const getUser = async (email: string) => {
-    const user = await fetchUser(email)
-    return user
+  const updateUser = async (email: string) => {
+    const updatedUser = await fetchUser(email, true)
+    if (updatedUser !== null) {
+      user.value = updatedUser
+    } else {
+      console.error('User not found')
+    }
   }
 
-  return { isLoggedIn, isChosenBoy, user, login, logout, register, getUser }
+  return { isLoggedIn, isChosenBoy, user, login, logout, register, updateUser }
 })

@@ -19,7 +19,7 @@ export const useCharacterStore = defineStore('character', () => {
         characters.value = charactersData
         const randomIndex = Math.floor(Math.random() * characters.value.length)
         charOfTheDay.value = characters.value[randomIndex] as Character
-        console.log('Hej! ', charOfTheDay.value)
+        console.log(charOfTheDay.value)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: object[] | any) {
         error.value = err
