@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { User } from '../types/User'
-import { fetchUser, registerUser } from '../api/getData'
+import { fetchUser, registerUser, getAllUsers } from '../api/getData'
 
 export const useSessionStore = defineStore('userSession', () => {
   const isLoggedIn = ref(false)
-  const isChosenBoy = ref(false)
   const user = ref({} as User)
 
   const login = async (email: string, password: string) => {
@@ -14,9 +13,6 @@ export const useSessionStore = defineStore('userSession', () => {
       if (fetchedUser !== null) {
         isLoggedIn.value = true
         user.value = fetchedUser
-        if (fetchedUser.email === 'ermin.bejtula@capgemini.com') {
-          isChosenBoy.value = true
-        }
       } else {
         alert('Invalid credentials')
       }
@@ -28,14 +24,19 @@ export const useSessionStore = defineStore('userSession', () => {
   const logout = () => {
     // TODO: Perhaps instead of using a boolean like this, check if there is a logged in user?
     isLoggedIn.value = false
-    isChosenBoy.value = false
     user.value = {} as User
   }
 
-  const register = async (email: string, password: string) => {
+  const register = async (email: string, password: string, userName: string) => {
     try {
-      registerUser(email, password)
+      registerUser(email, password, userName)
       isLoggedIn.value = true
+      user.value = {
+        email,
+        password,
+        userName,
+        fullstackleStats: { wins: 0, guesses: 0, playedGames: 0 },
+      }
     } catch (error) {
       console.error('Error registering user:', error)
     }
@@ -50,5 +51,17 @@ export const useSessionStore = defineStore('userSession', () => {
     }
   }
 
-  return { isLoggedIn, isChosenBoy, user, login, logout, register, updateUser }
+  const getAllStats = async () => {
+    const users = await getAllUsers(isLoggedIn.value)
+    if (users) {
+      return users as {
+        userName: string
+        stats: { guesses: number; playedGames: number; wins: number }
+      }[]
+    } else {
+      return []
+    }
+  }
+
+  return { isLoggedIn, user, login, logout, register, updateUser, getAllStats }
 })

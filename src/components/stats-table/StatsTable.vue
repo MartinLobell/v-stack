@@ -12,7 +12,13 @@
       </tr>
       <tr>
         <th>Win rate</th>
-        <td>{{ (userStats.wins / userStats.playedGames) * 100 }}%</td>
+        <td>
+          {{
+            ((userStats.wins / userStats.playedGames) * 100) % 1 === 0
+              ? (userStats.wins / userStats.playedGames) * 100
+              : ((userStats.wins / userStats.playedGames) * 100).toFixed(2)
+          }}%
+        </td>
       </tr>
       <tr>
         <th>Total guesses</th>
@@ -20,7 +26,7 @@
       </tr>
       <tr>
         <th>Avg. guesses/game</th>
-        <td>{{ (userStats.guesses / userStats.wins).toFixed(2) }}</td>
+        <td>{{ (userStats.guesses / userStats.wins).toFixed(1) }}</td>
       </tr>
     </tbody>
   </table>

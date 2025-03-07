@@ -83,6 +83,8 @@ watch(
       .fs-tablerow {
         .fs-tabledata {
           padding: 10px;
+          overflow: hidden;
+          white-space: nowrap;
         }
       }
     }

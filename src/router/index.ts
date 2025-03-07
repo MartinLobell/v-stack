@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/views/home/HomePage.vue'
 import AboutPage from '@/views/about-us/AboutPage.vue'
 import FullstackleGame from '@/views/fullstackle-game/FullstackleGame.vue'
+import LeaderBoard from '@/views/leaderboard/LeaderBoard.vue'
 
 export default createRouter({
   history: createWebHistory(),
@@ -20,6 +21,11 @@ export default createRouter({
       path: '/fullstackle-game',
       name: 'Fullstackle Game',
       component: FullstackleGame,
+    },
+    {
+      path: '/leaderboard',
+      name: 'Leaderboard',
+      component: LeaderBoard,
     },
   ],
 })

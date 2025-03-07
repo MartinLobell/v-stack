@@ -42,24 +42,36 @@ export const fetchUser = async (
   return user
 }
 
-export const registerUser = async (email: string, password: string): Promise<void> => {
+export const registerUser = async (
+  email: string,
+  password: string,
+  userName: string,
+): Promise<void> => {
   try {
     const querySnapshot = await getDocs(collection(db, 'users'))
     let emailExists = false
+    let nameExists = false
     querySnapshot.forEach((doc) => {
       const data = doc.data() as User
       if (data.email === email) {
         emailExists = true
+      }
+      if (data.userName === userName) {
+        nameExists = true
       }
     })
 
     if (emailExists) {
       throw new Error('Email already exists')
     }
+    if (nameExists) {
+      throw new Error(userName + ' is taken')
+    }
 
     await addDoc(collection(db, 'users'), {
       email,
       password,
+      userName,
       fullstackleStats: {
         wins: 0,
         guesses: 0,
@@ -101,4 +113,22 @@ export const updateFullstackleStats = async (
     // TODO: send errors
     throw new Error('Failed to update user stats')
   }
+}
+
+export const getAllUsers = async (isLoggedIn: boolean) => {
+  const users: { userName: string; stats: object }[] = []
+  if (isLoggedIn) {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'users'))
+      querySnapshot.forEach((doc) => {
+        const data = doc.data() as User
+        users.push({ userName: data.userName, stats: data.fullstackleStats })
+      })
+    } catch (error) {
+      console.error('Error fetching user:', error)
+      throw new Error('Failed to fetch user')
+    }
+    return users
+  }
+  return
 }

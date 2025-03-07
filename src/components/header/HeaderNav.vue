@@ -7,20 +7,22 @@
       <li v-if="sessionStore.isLoggedIn">
         <NavLink href="/fullstackle-game">Fullstackle</NavLink>
       </li>
+      <li v-if="sessionStore.isLoggedIn">
+        <NavLink href="/leaderboard">Leaderboard</NavLink>
+      </li>
       <li>
         <NavLink href="/about-us">About us</NavLink>
       </li>
       <li>
         <NavLink notActive v-if="!sessionStore.isLoggedIn" href="/">Login &#128512;</NavLink>
-        <span
-          tabindex="0"
-          class="logout-btn"
-          v-else
+        <NavLink
           @click="sessionStore.logout"
           @keyup.enter="sessionStore.logout"
+          notActive
+          v-if="sessionStore.isLoggedIn"
+          href="/"
+          >Logout &#128128;</NavLink
         >
-          Logout &#128128;
-        </span>
       </li>
     </ul>
   </nav>

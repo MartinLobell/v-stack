@@ -1,11 +1,11 @@
 <template>
-  <div className="fs-modal-backdrop" @click="emitCloseModal()">
-    <div className="fs-modal">
+  <div class="fs-modal-backdrop" @click="emitCloseModal()">
+    <div class="fs-modal" @click.stop>
       <div>
-        <h2 className="fs-modal-title">
+        <h2 class="fs-modal-title">
           {{ fullstackleStore.hasWon ? 'You won!' : 'You lost...' }}
         </h2>
-        <p className="fs-modal-text">
+        <p class="fs-modal-text">
           You have {{ !fullstackleStore.hasWon ? 'not successfully ' : '' }}guessed the character of
           the day!
         </p>

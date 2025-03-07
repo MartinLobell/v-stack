@@ -9,6 +9,14 @@
       v-model="email"
     />
     <InputField
+      v-if="!isLogin"
+      inputLabel="Username"
+      placeholder="Username"
+      id="fs-register-username"
+      type="text"
+      v-model="userName"
+    />
+    <InputField
       inputLabel="Password"
       placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
       id="fs-login-password"
@@ -32,6 +40,7 @@ import { ref } from 'vue'
 const sessionStore = useSessionStore()
 const email = ref('')
 const password = ref('')
+const userName = ref('')
 const isLogin = ref(true)
 
 const handleSubmit = (e: Event) => {
@@ -43,7 +52,7 @@ const handleSubmit = (e: Event) => {
   if (isLogin.value) {
     sessionStore.login(email.value, password.value)
   } else {
-    sessionStore.register(email.value, password.value)
+    sessionStore.register(email.value, password.value, userName.value)
   }
 }
 </script>

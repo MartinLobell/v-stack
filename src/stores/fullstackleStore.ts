@@ -10,7 +10,7 @@ export const useFullstackleStore = defineStore('fullstackle', () => {
   const sessionStore = useSessionStore()
 
   const checkTurnout = async (won: boolean, user: User, newGuesses: number) => {
-    if (newGuesses >= 3) {
+    if (newGuesses >= 4) {
       updateGame(user, newGuesses, won)
       hasLost.value = true
     }

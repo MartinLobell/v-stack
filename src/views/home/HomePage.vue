@@ -3,9 +3,7 @@
     <h1>Vüllstack Homepage</h1>
     <p>You are welcome</p>
     <LoginForm v-if="!sessionStore.isLoggedIn" />
-    <h2 v-else>
-      You are now logged in, {{ sessionStore.isChosenBoy ? 'chosen boy' : 'random user' }}!
-    </h2>
+    <h2 v-else>Hello, {{ sessionStore.user.userName }}!</h2>
   </div>
 </template>
 
