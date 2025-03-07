@@ -39,6 +39,12 @@ watch(
 .nav-link {
   text-decoration: none;
   color: #000;
+  padding: 4px;
+  &:focus {
+    outline: #000 solid 2px;
+    border: 2px solid #fff;
+    padding: 0;
+  }
   &:hover {
     transition: 0.2s;
     color: rgb(255, 204, 0);

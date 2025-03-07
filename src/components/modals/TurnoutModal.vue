@@ -20,8 +20,6 @@
 
 <script setup lang="ts">
 import { useFullstackleStore } from '@/stores/fullstackleStore'
-import { useSessionStore } from '@/stores/sessionStore'
-import { computed, onMounted } from 'vue'
 import StatsTable from '@/components/stats-table/StatsTable.vue'
 import FsButton from '@/components/button/FsButton.vue'
 
@@ -29,14 +27,7 @@ defineProps<{
   characterName: string
 }>()
 const fullstackleStore = useFullstackleStore()
-const sessionStore = useSessionStore()
 const emit = defineEmits(['close-modal'])
-
-const userStats = computed(() => sessionStore.user.fullstackleStats)
-
-onMounted(() => {
-  console.log(userStats.value)
-})
 
 const emitCloseModal = () => {
   emit('close-modal')

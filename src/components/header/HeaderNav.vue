@@ -14,14 +14,14 @@
         <NavLink href="/about-us">About us</NavLink>
       </li>
       <li>
-        <NavLink notActive v-if="!sessionStore.isLoggedIn" href="/">Login &#128512;</NavLink>
+        <NavLink notActive v-if="!sessionStore.isLoggedIn" href="/">Login</NavLink>
         <NavLink
           @click="sessionStore.logout"
           @keyup.enter="sessionStore.logout"
           notActive
           v-if="sessionStore.isLoggedIn"
           href="/"
-          >Logout &#128128;</NavLink
+          >Logout</NavLink
         >
       </li>
     </ul>

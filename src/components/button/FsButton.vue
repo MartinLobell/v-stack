@@ -36,6 +36,10 @@ const props = defineProps<ButtonProps>()
   margin: 0.5rem 0;
   font-weight: 700;
   cursor: pointer;
+  &:focus {
+    outline: #000 solid 2px;
+    border: 2px solid #fff;
+  }
   &.secondary {
     background-color: rgb(255, 204, 0);
     color: #000;

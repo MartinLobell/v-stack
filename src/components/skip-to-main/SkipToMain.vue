@@ -8,7 +8,12 @@
 const skipToMain = () => {
   const main = document.getElementsByTagName('main')[0]
   if (main) {
-    main.focus()
+    const focusableElements = main.querySelectorAll(
+      'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])',
+    )
+    if (focusableElements.length > 0) {
+      ;(focusableElements[0] as HTMLElement).focus()
+    }
   }
 }
 </script>
