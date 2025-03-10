@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { updateFullstackleStats } from '../api/getData'
-import type { User } from '../types/User'
+import type { FsUser } from '../types/FsUser'
 import { useSessionStore } from './sessionStore'
 
 export const useFullstackleStore = defineStore('fullstackle', () => {
@@ -9,7 +9,7 @@ export const useFullstackleStore = defineStore('fullstackle', () => {
   const hasLost = ref(false)
   const sessionStore = useSessionStore()
 
-  const checkTurnout = async (won: boolean, user: User, newGuesses: number) => {
+  const checkTurnout = async (won: boolean, user: FsUser, newGuesses: number) => {
     if (newGuesses >= 4) {
       updateGame(user, newGuesses, won)
       hasLost.value = true
@@ -20,7 +20,7 @@ export const useFullstackleStore = defineStore('fullstackle', () => {
     }
   }
 
-  const updateGame = (user: User, newGuesses: number, won: boolean) => {
+  const updateGame = (user: FsUser, newGuesses: number, won: boolean) => {
     updateFullstackleStats(user, newGuesses, won)
       .then(() => sessionStore.updateUser(user.email))
       .finally(() => console.log(JSON.stringify(sessionStore.user)))

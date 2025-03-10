@@ -34,7 +34,7 @@
 import { useSessionStore } from '@/stores/sessionStore'
 import { ref } from 'vue'
 const sessionStore = useSessionStore()
-interface User {
+interface LeaderboardUser {
   userName: string
   stats: {
     wins: number
@@ -43,9 +43,9 @@ interface User {
   }
 }
 
-const users = ref<User[]>([])
+const users = ref<LeaderboardUser[]>([])
 
-sessionStore.getAllStats().then((data: User[]) => {
+sessionStore.getAllStats().then((data: LeaderboardUser[]) => {
   users.value = (data || []).sort((a, b) => {
     const aWinsPerGuesses = a.stats.wins / a.stats.guesses / a.stats.playedGames
     const bWinsPerGuesses = b.stats.wins / b.stats.guesses / b.stats.playedGames

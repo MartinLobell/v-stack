@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { User } from '../types/User'
+import type { FsUser } from '../types/FsUser'
 import { fetchUser, registerUser, getAllUsers } from '../api/getData'
 
 export const useSessionStore = defineStore('userSession', () => {
   const isLoggedIn = ref(false)
-  const user = ref({} as User)
+  const user = ref({} as FsUser)
 
   const login = async (email: string, password: string) => {
     try {
-      const fetchedUser: User | null = await fetchUser(email, false, password)
+      const fetchedUser: FsUser | null = await fetchUser(email, false, password)
       if (fetchedUser !== null) {
         isLoggedIn.value = true
         user.value = fetchedUser
@@ -24,7 +24,7 @@ export const useSessionStore = defineStore('userSession', () => {
   const logout = () => {
     // TODO: Perhaps instead of using a boolean like this, check if there is a logged in user?
     isLoggedIn.value = false
-    user.value = {} as User
+    user.value = {} as FsUser
   }
 
   const register = async (email: string, password: string, userName: string) => {

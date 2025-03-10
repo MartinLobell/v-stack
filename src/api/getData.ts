@@ -1,7 +1,7 @@
 import { db } from '../lib/firebase'
 import { updateDoc, collection, getDocs, addDoc } from 'firebase/firestore'
 import type { Character } from '../types/Character'
-import type { User } from '../types/User'
+import type { FsUser } from '../types/FsUser'
 
 export const fetchChars = async (): Promise<Character[]> => {
   const characters: Character[] = []
@@ -22,12 +22,12 @@ export const fetchUser = async (
   email: string,
   isLoggedIn: boolean,
   password?: string,
-): Promise<User | null> => {
-  let user: User | null = null
+): Promise<FsUser | null> => {
+  let user: FsUser | null = null
   try {
     const querySnapshot = await getDocs(collection(db, 'users'))
     querySnapshot.forEach((doc) => {
-      const data = doc.data() as User
+      const data = doc.data() as FsUser
       if (data.email === email) {
         if (isLoggedIn || (password && data.password === password)) {
           user = data
@@ -52,7 +52,7 @@ export const registerUser = async (
     let emailExists = false
     let nameExists = false
     querySnapshot.forEach((doc) => {
-      const data = doc.data() as User
+      const data = doc.data() as FsUser
       if (data.email === email) {
         emailExists = true
       }
@@ -86,7 +86,7 @@ export const registerUser = async (
 }
 
 export const updateFullstackleStats = async (
-  user: User,
+  user: FsUser,
   newGuesses: number,
   won: boolean,
 ): Promise<void> => {
@@ -94,7 +94,7 @@ export const updateFullstackleStats = async (
     const querySnapshot = await getDocs(collection(db, 'users'))
     let userRef = null
     querySnapshot.forEach((doc) => {
-      const data = doc.data() as User
+      const data = doc.data() as FsUser
       if (data.email === user.email) {
         userRef = doc.ref
       }
@@ -121,7 +121,7 @@ export const getAllUsers = async (isLoggedIn: boolean) => {
     try {
       const querySnapshot = await getDocs(collection(db, 'users'))
       querySnapshot.forEach((doc) => {
-        const data = doc.data() as User
+        const data = doc.data() as FsUser
         users.push({ userName: data.userName, stats: data.fullstackleStats })
       })
     } catch (error) {
