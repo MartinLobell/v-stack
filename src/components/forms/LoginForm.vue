@@ -1,60 +1,32 @@
 <template>
-  <form class="fs-login-signup-form" @submit="handleSubmit">
-    <h2 class="fs-form-h2">{{ isLogin ? 'Log in' : 'Sign up' }}</h2>
-    <InputField
-      inputLabel="Email"
-      placeholder="name@example.com"
-      id="fs-login-email"
-      type="email"
-      v-model="email"
-    />
-    <InputField
-      v-if="!isLogin"
-      inputLabel="Username"
-      placeholder="Username"
-      id="fs-register-username"
-      type="text"
-      v-model="userName"
-    />
-    <InputField
-      inputLabel="Password"
-      placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-      id="fs-login-password"
-      type="password"
-      v-model="password"
-    />
-    <div class="fs-btn-section">
-      <FsButton type="submit" btnClass="primary">{{ isLogin ? 'Login' : 'Register' }}</FsButton>
-      <FsButton @click="() => (isLogin = !isLogin)" type="button" btnClass="secondary"
-        >Switch to {{ !isLogin ? 'login' : 'register' }}</FsButton
-      >
+  <form class="fs-login-signup-form">
+    <h2 class="fs-form-h2">Log in with Google</h2>
+    <div v-if="!sessionStore.user">
+      <div class="fs-btn-section">
+        <FsButton btnClass="primary" type="button" @click="sessionStore.signInWithGoogle"
+          >Sign in with Google</FsButton
+        >
+      </div>
+    </div>
+    <div v-else>
+      <p>Welcome, {{ sessionStore.user.displayName }}</p>
+      <img
+        class="fs-profile-image"
+        :src="sessionStore.user.photoURL || ''"
+        alt="Profile Picture"
+        width="100"
+      />
+      <div class="fs-btn-section">
+        <FsButton btnClass="primary" type="button" @click="sessionStore.logout">Logout</FsButton>
+      </div>
     </div>
   </form>
 </template>
 
 <script setup lang="ts">
 import FsButton from '../../components/button/FsButton.vue'
-import InputField from '../inputfield/InputField.vue'
 import { useSessionStore } from '@/stores/sessionStore'
-import { ref } from 'vue'
 const sessionStore = useSessionStore()
-const email = ref('')
-const password = ref('')
-const userName = ref('')
-const isLogin = ref(true)
-
-const handleSubmit = (e: Event) => {
-  e.preventDefault()
-  if (!email.value || !password.value) {
-    alert('Please fill in all fields')
-    return
-  }
-  if (isLogin.value) {
-    sessionStore.login(email.value, password.value)
-  } else {
-    sessionStore.register(email.value, password.value, userName.value)
-  }
-}
 </script>
 
 <style scoped lang="scss">
@@ -77,5 +49,12 @@ const handleSubmit = (e: Event) => {
   .fs-btn-section {
     margin: 2rem 0 1rem 0;
   }
+  .fs-profile-image {
+    border-radius: 50%;
+  }
+}
+.auth-container {
+  text-align: center;
+  margin-top: 20px;
 }
 </style>

@@ -1,67 +1,54 @@
 import { defineStore } from 'pinia'
+import { auth, db } from '@/lib/firebase'
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+  type User,
+} from 'firebase/auth'
+import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { ref } from 'vue'
-import type { FsUser } from '../types/FsUser'
-import { fetchUser, registerUser, getAllUsers } from '../api/getData'
 
 export const useSessionStore = defineStore('userSession', () => {
-  const isLoggedIn = ref(false)
-  const user = ref({} as FsUser)
+  const user = ref<User | null>(null)
 
-  const login = async (email: string, password: string) => {
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider()
     try {
-      const fetchedUser: FsUser | null = await fetchUser(email, false, password)
-      if (fetchedUser !== null) {
-        isLoggedIn.value = true
-        user.value = fetchedUser
-      } else {
-        alert('Invalid credentials')
+      const result = await signInWithPopup(auth, provider)
+      const userDoc = doc(db, 'users', result.user.uid)
+      const userSnap = await getDoc(userDoc)
+
+      if (!userSnap.exists()) {
+        await setDoc(userDoc, {
+          uid: result.user.uid,
+          email: result.user.email,
+          displayName: result.user.displayName,
+          photoURL: result.user.photoURL,
+          fullstackleStats: {
+            wins: 0,
+            guesses: 0,
+            playedGames: 0,
+          },
+        })
       }
     } catch (error) {
-      console.error('Error logging in:', error)
+      console.error('Google Sign-In Error:', error)
     }
   }
 
-  const logout = () => {
-    // TODO: Perhaps instead of using a boolean like this, check if there is a logged in user?
-    isLoggedIn.value = false
-    user.value = {} as FsUser
+  const logout = async () => {
+    alert('Hate the player, not the game.')
+    await signOut(auth)
+    user.value = null
   }
 
-  const register = async (email: string, password: string, userName: string) => {
-    try {
-      registerUser(email, password, userName)
-      isLoggedIn.value = true
-      user.value = {
-        email,
-        password,
-        userName,
-        fullstackleStats: { wins: 0, guesses: 0, playedGames: 0 },
-      }
-    } catch (error) {
-      console.error('Error registering user:', error)
-    }
-  }
+  onAuthStateChanged(auth, (firebaseUser) => {
+    user.value = firebaseUser
+  })
 
-  const updateUser = async (email: string) => {
-    const updatedUser = await fetchUser(email, true)
-    if (updatedUser !== null) {
-      user.value = updatedUser
-    } else {
-      console.error('User not found')
-    }
-  }
+  const updateUser = () => {}
 
-  const getAllStats = async () => {
-    const users = await getAllUsers(isLoggedIn.value)
-    if (users) {
-      return users as {
-        userName: string
-        stats: { guesses: number; playedGames: number; wins: number }
-      }[]
-    } else {
-      return []
-    }
-  }
-
-  return { isLoggedIn, user, login, logout, register, updateUser, getAllStats }
+  return { user, signInWithGoogle, logout, updateUser }
 })

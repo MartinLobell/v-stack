@@ -26,19 +26,32 @@
       </tr>
       <tr>
         <th>Avg. guesses/game</th>
-        <td>{{ (userStats.guesses / userStats.wins).toFixed(1) }}</td>
+        <td>{{ (userStats.guesses / userStats.playedGames).toFixed(1) }}</td>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useSessionStore } from '@/stores/sessionStore'
-import { computed } from 'vue'
+import { useFullstackleStore } from '@/stores/fullstackleStore'
+import type { User } from 'firebase/auth'
+import type { DocumentData } from 'firebase/firestore'
 
 const sessionStore = useSessionStore()
+const fullstackleStore = useFullstackleStore()
+const userStats = ref<UserStats>({ wins: 0, guesses: 0, playedGames: 0 })
 
-const userStats = computed(() => sessionStore.user?.fullstackleStats || {})
+type UserStats = {
+  wins: number
+  guesses: number
+  playedGames: number
+}
+
+fullstackleStore.getStats(sessionStore.user as User).then((data: DocumentData) => {
+  userStats.value = data.fullstackleStats
+})
 </script>
 
 <style scoped lang="scss">

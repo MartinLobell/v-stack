@@ -4,22 +4,22 @@
       <li>
         <NavLink href="/">Home</NavLink>
       </li>
-      <li v-if="sessionStore.isLoggedIn">
+      <li v-if="sessionStore.user">
         <NavLink href="/fullstackle-game">Fullstackle</NavLink>
       </li>
-      <li v-if="sessionStore.isLoggedIn">
+      <li v-if="sessionStore.user">
         <NavLink href="/leaderboard">Leaderboard</NavLink>
       </li>
       <li>
         <NavLink href="/about-us">About us</NavLink>
       </li>
       <li>
-        <NavLink notActive v-if="!sessionStore.isLoggedIn" href="/">Login</NavLink>
+        <NavLink notActive v-if="!sessionStore.user" href="/">Login</NavLink>
         <NavLink
           @click="sessionStore.logout"
           @keyup.enter="sessionStore.logout"
           notActive
-          v-if="sessionStore.isLoggedIn"
+          v-if="sessionStore.user"
           href="/"
           >Logout</NavLink
         >

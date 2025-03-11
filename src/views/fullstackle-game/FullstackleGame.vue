@@ -1,5 +1,5 @@
 <template>
-  <span class="fs-game-container" v-if="sessionStore.isLoggedIn">
+  <span class="fs-game-container" v-if="sessionStore.user">
     <h1>Fullstackle</h1>
     <p>FullstackJS1 Member Guessing game</p>
     <InputField />

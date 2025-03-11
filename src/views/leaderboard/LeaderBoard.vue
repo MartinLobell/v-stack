@@ -4,7 +4,7 @@
     <table class="fs-leaderboard-table">
       <thead>
         <tr>
-          <th>Username</th>
+          <th>Player</th>
           <th>Played games</th>
           <th>Total guesses</th>
           <th>Wins</th>
@@ -12,16 +12,32 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.userName">
-          <th>{{ user.userName }}</th>
-          <td>{{ user.stats.playedGames }}</td>
-          <td>{{ user.stats.guesses }}</td>
-          <td>{{ user.stats.wins }}</td>
+        <tr v-for="user in users" :key="user.displayName">
+          <th class="fs-profile-th">
+            <img
+              :src="user.photoURL || '/src/assets/icons/profile-logo.png'"
+              width="45"
+              :alt="user.displayName + 's profile image'"
+            />{{ user.displayName }}
+          </th>
+          <td>{{ user.fullstackleStats.playedGames }}</td>
+          <td>{{ user.fullstackleStats.guesses }}</td>
+          <td>{{ user.fullstackleStats.wins }}</td>
           <td>
             {{
-              (user.stats.wins / user.stats.guesses / user.stats.playedGames) % 1 === 0
-                ? user.stats.wins / user.stats.guesses / user.stats.playedGames
-                : (user.stats.wins / user.stats.guesses / user.stats.playedGames).toFixed(2)
+              (user.fullstackleStats.wins /
+                user.fullstackleStats.guesses /
+                user.fullstackleStats.playedGames) %
+                1 ===
+              0
+                ? user.fullstackleStats.wins /
+                  user.fullstackleStats.guesses /
+                  user.fullstackleStats.playedGames
+                : (
+                    user.fullstackleStats.wins /
+                    user.fullstackleStats.guesses /
+                    user.fullstackleStats.playedGames
+                  ).toFixed(2)
             }}
           </td>
         </tr>
@@ -31,12 +47,26 @@
 </template>
 
 <script setup lang="ts">
-import { useSessionStore } from '@/stores/sessionStore'
+import { useFullstackleStore } from '@/stores/fullstackleStore'
 import { ref } from 'vue'
-const sessionStore = useSessionStore()
+import type { DocumentData } from 'firebase/firestore'
+const fullstackleStore = useFullstackleStore()
 interface LeaderboardUser {
-  userName: string
-  stats: {
+  displayName: string
+  photoURL: string
+  fullstackleStats: {
+    wins: number
+    guesses: number
+    playedGames: number
+  }
+}
+
+type userRes = {
+  displayName: string
+  email: string
+  photoURL: string
+  uid: string
+  fullstackleStats: {
     wins: number
     guesses: number
     playedGames: number
@@ -45,10 +75,21 @@ interface LeaderboardUser {
 
 const users = ref<LeaderboardUser[]>([])
 
-sessionStore.getAllStats().then((data: LeaderboardUser[]) => {
-  users.value = (data || []).sort((a, b) => {
-    const aWinsPerGuesses = a.stats.wins / a.stats.guesses / a.stats.playedGames
-    const bWinsPerGuesses = b.stats.wins / b.stats.guesses / b.stats.playedGames
+fullstackleStore.getStats().then((data: DocumentData) => {
+  const leaderboardUsers: LeaderboardUser[] = data.map((user: userRes) => ({
+    displayName: user.displayName,
+    photoURL: user.photoURL,
+    fullstackleStats: {
+      wins: user.fullstackleStats.wins,
+      guesses: user.fullstackleStats.guesses,
+      playedGames: user.fullstackleStats.playedGames,
+    },
+  }))
+  users.value = (leaderboardUsers || []).sort((a, b) => {
+    const aWinsPerGuesses =
+      a.fullstackleStats.wins / a.fullstackleStats.guesses / a.fullstackleStats.playedGames
+    const bWinsPerGuesses =
+      b.fullstackleStats.wins / b.fullstackleStats.guesses / b.fullstackleStats.playedGames
     return bWinsPerGuesses - aWinsPerGuesses
   })
 })
@@ -83,6 +124,15 @@ sessionStore.getAllStats().then((data: LeaderboardUser[]) => {
       tr {
         display: table-row;
         width: 100%;
+        th.fs-profile-th {
+          display: flex;
+          align-items: center;
+          padding: 10px;
+          img {
+            border-radius: 50%;
+            margin-right: 10px;
+          }
+        }
       }
     }
     td {

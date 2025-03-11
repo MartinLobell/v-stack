@@ -42,7 +42,6 @@ const openModal = ref(false)
 
 const closeModal = () => {
   openModal.value = !openModal.value
-  console.log()
 }
 
 watch(
@@ -52,10 +51,9 @@ watch(
     if (newCharArr.length > 0) {
       fullstackleStore.checkTurnout(
         latestGuess.name === characterStore.charOfTheDay.name,
-        sessionStore.user,
+        sessionStore.user!,
         newCharArr.length,
       )
-      console.log(sessionStore.user.fullstackleStats)
       setTimeout(() => {
         openModal.value =
           latestGuess.name === characterStore.charOfTheDay.name || fullstackleStore.hasLost
