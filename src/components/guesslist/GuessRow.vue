@@ -9,10 +9,15 @@
     <td
       :class="[
         'fs-tabledata',
+        'fs-number-data',
         { correct_attribute: character.birthYear === charOfTheDay.birthYear },
       ]"
     >
       {{ character.birthYear }}
+      <span class="fs-arrow">
+        {{ character.birthYear > charOfTheDay.birthYear ? '&#10507;' : '' }}
+        {{ character.birthYear < charOfTheDay.birthYear ? '&#10506;' : '' }}
+      </span>
     </td>
     <td
       :class="['fs-tabledata', { correct_attribute: character.hometown === charOfTheDay.hometown }]"
@@ -27,16 +32,18 @@
     >
       {{ character.hairColour }}
     </td>
-    <td :class="['fs-tabledata', { correct_attribute: character.height === charOfTheDay.height }]">
-      {{ character.height }}
-    </td>
     <td
       :class="[
         'fs-tabledata',
-        { correct_attribute: character.joinedFullstack === charOfTheDay.joinedFullstack },
+        'fs-number-data',
+        { correct_attribute: character.height === charOfTheDay.height },
       ]"
     >
-      {{ character.joinedFullstack }}
+      {{ character.height }}cm
+      <span>
+        {{ character.height > charOfTheDay.height ? '&#10507;' : '' }}
+        {{ character.height < charOfTheDay.height ? '&#10506;' : '' }}
+      </span>
     </td>
   </tr>
 </template>
@@ -59,6 +66,10 @@ defineProps<{
     width: calc(100% / var(--column-count));
     overflow: hidden;
     white-space: nowrap;
+    &.fs-number-data {
+      display: flex;
+      justify-content: space-between;
+    }
     &.correct_attribute {
       background-color: rgb(139, 170, 0);
     }

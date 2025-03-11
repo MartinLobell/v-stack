@@ -15,7 +15,6 @@
           <th key="hometown" className="fs-tabledata">Hometown</th>
           <th key="haircolor" className="fs-tabledata">Hair color</th>
           <th key="height" className="fs-tabledata">Height</th>
-          <th key="joinedfullstack" className="fs-tabledata">Joined fullstack</th>
         </tr>
       </thead>
       <tbody class="fs-tablebody" v-if="characterStore.guessedCharacters">
@@ -33,11 +32,9 @@ import GuessRow from './GuessRow.vue'
 import TurnoutModal from '@/components/modals/TurnoutModal.vue'
 import { useCharacterStore } from '@/stores/characterStore'
 import { useFullstackleStore } from '@/stores/fullstackleStore'
-import { useSessionStore } from '@/stores/sessionStore'
 import type { Character } from '@/types/Character'
 const characterStore = useCharacterStore()
 const fullstackleStore = useFullstackleStore()
-const sessionStore = useSessionStore()
 const openModal = ref(false)
 
 const closeModal = () => {
@@ -51,7 +48,6 @@ watch(
     if (newCharArr.length > 0) {
       fullstackleStore.checkTurnout(
         latestGuess.name === characterStore.charOfTheDay.name,
-        sessionStore.user!,
         newCharArr.length,
       )
       setTimeout(() => {

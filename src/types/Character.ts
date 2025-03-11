@@ -5,5 +5,4 @@ export interface Character {
   hometown: string
   hairColour: string
   height: string
-  joinedFullstack: number
 }

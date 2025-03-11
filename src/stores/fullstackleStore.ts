@@ -10,18 +10,18 @@ export const useFullstackleStore = defineStore('fullstackle', () => {
   const hasLost = ref(false)
   const sessionStore = useSessionStore()
 
-  const checkTurnout = async (won: boolean, user: User, newGuesses: number) => {
+  const checkTurnout = async (won: boolean, newGuesses: number) => {
     if (newGuesses >= 4) {
-      updatePlayerStats(user, newGuesses, won)
+      updatePlayerStats(newGuesses, won)
       hasLost.value = true
     }
     if (won === true) {
-      updatePlayerStats(user, newGuesses, won)
+      updatePlayerStats(newGuesses, won)
       hasWon.value = won
     }
   }
 
-  const updatePlayerStats = async (user: User, newGuesses: number, won: boolean) => {
+  const updatePlayerStats = async (newGuesses: number, won: boolean) => {
     if (sessionStore.user) {
       const userDoc = doc(db, 'users', sessionStore.user.uid)
       const userSnap = await getDoc(userDoc)
@@ -33,7 +33,7 @@ export const useFullstackleStore = defineStore('fullstackle', () => {
           displayName: sessionStore.user.displayName,
           photoURL: sessionStore.user.photoURL,
           fullstackleStats: {
-            wins: 0 + (won ? 1 : 0),
+            wins: userData.fullstackleStats?.wins + (won ? 1 : 0),
             guesses: (userData.fullstackleStats?.guesses || 0) + newGuesses,
             playedGames: (userData.fullstackleStats?.playedGames || 0) + 1,
           },
