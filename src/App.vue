@@ -15,7 +15,7 @@ import SkipToMain from './components/skip-to-main/SkipToMain.vue'
 
 <style scoped lang="scss">
 .fs-main {
-  margin: 3.35rem 8rem 0 8rem;
+  margin: 59.2px 8rem 0 8rem;
   display: flex;
   flex-direction: column;
   align-items: center;

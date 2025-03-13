@@ -1,7 +1,7 @@
-import { db } from '../lib/firebase'
-import { collection, getDocs, addDoc } from 'firebase/firestore'
+import { db, auth } from '../lib/firebase'
+import { collection, getDocs, doc, getDoc, setDoc } from 'firebase/firestore'
+import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import type { Character } from '../types/Character'
-import type { FsUser } from '../types/FsUser'
 
 export const fetchChars = async (): Promise<Character[]> => {
   const characters: Character[] = []
@@ -18,80 +18,27 @@ export const fetchChars = async (): Promise<Character[]> => {
   }
 }
 
-export const fetchUser = async (email: string, password?: string): Promise<FsUser | null> => {
-  let user: FsUser | null = null
-  try {
-    const querySnapshot = await getDocs(collection(db, 'users'))
-    querySnapshot.forEach((doc) => {
-      const data = doc.data() as FsUser
-      if (data.email === email) {
-        if (password && data.password === password) {
-          user = data
-        }
-      }
-    })
-  } catch (error) {
-    console.error('Error fetching user:', error)
-    // TODO: send errors
-    throw new Error('Failed to fetch user')
-  }
-  return user
-}
+export const loginWithGoogle = async () => {
+  const provider = new GoogleAuthProvider()
+  const result = await signInWithPopup(auth, provider)
+  const userDoc = doc(db, 'users', result.user.uid)
+  const userSnap = await getDoc(userDoc)
 
-export const registerUser = async (
-  email: string,
-  password: string,
-  userName: string,
-): Promise<void> => {
-  try {
-    const querySnapshot = await getDocs(collection(db, 'users'))
-    let emailExists = false
-    let nameExists = false
-    querySnapshot.forEach((doc) => {
-      const data = doc.data() as FsUser
-      if (data.email === email) {
-        emailExists = true
-      }
-      if (data.userName === userName) {
-        nameExists = true
-      }
-    })
-
-    if (emailExists) {
-      throw new Error('Email already exists')
-    }
-    if (nameExists) {
-      throw new Error(userName + ' is taken')
-    }
-
-    await addDoc(collection(db, 'users'), {
-      email,
-      password,
-      userName,
+  if (!userSnap.exists()) {
+    await setDoc(userDoc, {
+      uid: result.user.uid,
+      email: result.user.email,
+      displayName: result.user.displayName,
+      photoURL: result.user.photoURL,
       fullstackleStats: {
         wins: 0,
         guesses: 0,
         playedGames: 0,
       },
     })
-  } catch (error) {
-    console.error('Error registering user:', error)
-    // TODO: send errors
-    throw new Error('Failed to register user')
   }
 }
 
-export const getAllUsers = async () => {
-  const users: { userName: string; stats: object }[] = []
-  try {
-    const querySnapshot = await getDocs(collection(db, 'users'))
-    querySnapshot.forEach((doc) => {
-      const data = doc.data() as FsUser
-      users.push({ userName: data.userName, stats: data.fullstackleStats })
-    })
-  } catch (error) {
-    console.error('Error fetching user:', error)
-    throw new Error('Failed to fetch user')
-  }
-  return users
+export const signOutWithGoogle = async () => {
+  await signOut(auth)
 }

@@ -23,7 +23,7 @@
           <td>{{ user.fullstackleStats.playedGames }}</td>
           <td>{{ user.fullstackleStats.guesses }}</td>
           <td>{{ user.fullstackleStats.wins }}</td>
-          <td>
+          <td class="underline">
             {{
               (user.fullstackleStats.wins /
                 user.fullstackleStats.guesses /
@@ -102,7 +102,7 @@ fullstackleStore.getStats().then((data: DocumentData) => {
   .fs-leaderboard-table {
     font-size: 14px;
     border-spacing: 0;
-    margin: 2rem auto;
+    // margin: 2rem auto;
     width: 100%;
     text-align: left;
     table-layout: fixed;
@@ -113,9 +113,6 @@ fullstackleStore.getStats().then((data: DocumentData) => {
       td,
       th {
         padding: 10px;
-      }
-      .underline {
-        text-decoration: underline;
       }
     }
     tbody {
@@ -140,6 +137,9 @@ fullstackleStore.getStats().then((data: DocumentData) => {
       display: table-cell;
       width: calc(100% / var(--column-count));
       overflow: hidden;
+    }
+    .underline {
+      text-decoration: underline;
     }
   }
 }

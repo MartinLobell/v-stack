@@ -50,10 +50,25 @@ watch(
         latestGuess.name === characterStore.charOfTheDay.name,
         newCharArr.length,
       )
+      // Save the guessed characters to localStorage
+      localStorage.setItem('guessedCharacters', JSON.stringify(newCharArr))
+
+      // Open the modal if the guess is correct or the player has lost
       setTimeout(() => {
         openModal.value =
           latestGuess.name === characterStore.charOfTheDay.name || fullstackleStore.hasLost
       }, 1000)
+
+      // Check if the date has changed since the last play
+      const lastPlayDate = localStorage.getItem('lastPlayDate')
+      const currentDate = new Date().toDateString()
+      if (lastPlayDate !== currentDate) {
+        // Reset the guessed characters if the date has changed
+        characterStore.guessedCharacters = []
+        localStorage.setItem('guessedCharacters', JSON.stringify([]))
+      }
+      // Update the last play date in localStorage
+      localStorage.setItem('lastPlayDate', currentDate)
     }
   },
 )

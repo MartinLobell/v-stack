@@ -13,6 +13,13 @@ export const useCharacterStore = defineStore('character', () => {
   const guessedCharacters = ref([] as Character[])
 
   onMounted(() => {
+    const storedGuessedCharacters = localStorage.getItem('guessedCharacters')
+    if (storedGuessedCharacters) {
+      guessedCharacters.value = JSON.parse(storedGuessedCharacters)
+    }
+  })
+
+  onMounted(() => {
     const getCharacterData = async () => {
       try {
         const charactersData: Character[] = await fetchChars()
