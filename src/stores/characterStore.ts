@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { Character } from '@/types/Character'
 import { onMounted } from 'vue'
-import { fetchChars } from '@/api/getData'
+import { fetchChars, getCharOfTheDay } from '@/api/getData'
 
 export const useCharacterStore = defineStore('character', () => {
   const characters = ref<Character[]>([])
@@ -24,8 +24,7 @@ export const useCharacterStore = defineStore('character', () => {
       try {
         const charactersData: Character[] = await fetchChars()
         characters.value = charactersData
-        const randomIndex = Math.floor(Math.random() * characters.value.length)
-        charOfTheDay.value = characters.value[randomIndex] as Character
+        charOfTheDay.value = await getCharOfTheDay()
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: object[] | any) {
         error.value = err

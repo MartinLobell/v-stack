@@ -18,6 +18,20 @@ export const fetchChars = async (): Promise<Character[]> => {
   }
 }
 
+export const getCharOfTheDay = async (): Promise<Character> => {
+  try {
+    const docRef = doc(db, 'dailyCharacter', 'current')
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      return docSnap.data() as Character
+    }
+    throw new Error('Character of the day not found')
+  } catch (error) {
+    console.error('Error fetching character of the day:', error)
+    throw new Error('Failed to fetch character of the day')
+  }
+}
+
 export const loginWithGoogle = async () => {
   const provider = new GoogleAuthProvider()
   const result = await signInWithPopup(auth, provider)

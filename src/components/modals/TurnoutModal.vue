@@ -13,15 +13,24 @@
       </div>
       <StatsTable v-if="fullstackleStore.hasWon || fullstackleStore.hasLost" />
 
-      <FsButton type="button" btnClass="primary" @click="emitCloseModal()">Close</FsButton>
+      <FsButton
+        id="fs-turnout-modal-button"
+        type="button"
+        btnClass="primary"
+        @click="emitCloseModal()"
+        @keyup.tab="restrainFocus('#fs-turnout-modal-button')"
+        >Close</FsButton
+      >
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useFullstackleStore } from '@/stores/fullstackleStore'
 import StatsTable from '@/components/stats-table/StatsTable.vue'
 import FsButton from '@/components/button/FsButton.vue'
+import { restrainFocus } from '@/composables/modalTab'
 
 defineProps<{
   characterName: string
@@ -32,6 +41,14 @@ const emit = defineEmits(['close-modal'])
 const emitCloseModal = () => {
   emit('close-modal')
 }
+onMounted(() => {
+  const firstInteractiveElement = document.querySelector(
+    '.fs-modal button, .fs-modal a, .fs-modal input, .fs-modal select, .fs-modal textarea',
+  )
+  if (firstInteractiveElement) {
+    ;(firstInteractiveElement as HTMLElement).focus()
+  }
+})
 </script>
 
 <style scoped lang="scss">
