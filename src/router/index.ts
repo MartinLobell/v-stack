@@ -3,6 +3,7 @@ import HomePage from '@/views/home/HomePage.vue'
 import AboutPage from '@/views/about-us/AboutPage.vue'
 import FullstackleGame from '@/views/fullstackle-game/FullstackleGame.vue'
 import LeaderBoard from '@/views/leaderboard/LeaderBoard.vue'
+import FindErminGame from '@/views/find-ermin/FindErminGame.vue'
 
 export default createRouter({
   history: createWebHistory(),
@@ -26,6 +27,11 @@ export default createRouter({
       path: '/leaderboard',
       name: 'Leaderboard',
       component: LeaderBoard,
+    },
+    {
+      path: '/find-ermin',
+      name: 'Find Ermin',
+      component: FindErminGame,
     },
   ],
 })

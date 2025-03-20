@@ -8,6 +8,9 @@
         <NavLink href="/fullstackle-game">Fullstackle</NavLink>
       </li>
       <li v-if="sessionStore.user">
+        <NavLink href="/find-ermin">Find Ermin</NavLink>
+      </li>
+      <li v-if="sessionStore.user">
         <NavLink href="/leaderboard">Leaderboard</NavLink>
       </li>
       <li>
