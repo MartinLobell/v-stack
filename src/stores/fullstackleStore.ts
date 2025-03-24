@@ -32,10 +32,12 @@ export const useFullstackleStore = defineStore('fullstackle', () => {
           email: sessionStore.user.email,
           displayName: sessionStore.user.displayName,
           photoURL: sessionStore.user.photoURL,
-          fullstackleStats: {
-            wins: userData.fullstackleStats?.wins + (won ? 1 : 0),
-            guesses: (userData.fullstackleStats?.guesses || 0) + newGuesses,
-            playedGames: (userData.fullstackleStats?.playedGames || 0) + 1,
+          gameStats: {
+            fullstackleStats: {
+              wins: userData.gameStats.fullstackleStats?.wins + (won ? 1 : 0),
+              guesses: (userData.gameStats.fullstackleStats?.guesses || 0) + newGuesses,
+              playedGames: (userData.gameStats.fullstackleStats?.playedGames || 0) + 1,
+            },
           },
         })
       }

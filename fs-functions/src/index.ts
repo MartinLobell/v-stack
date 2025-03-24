@@ -4,9 +4,9 @@ import * as admin from 'firebase-admin'
 admin.initializeApp()
 const db = admin.firestore()
 
-// 🕛 Scheduled job to update "Character of the Day" at midnight UTC
+// Scheduled job to update "Character of the Day" at midnight UTC
 export const updateCharacterDaily = functions.pubsub
-  .schedule('every day 00:00')
+  .schedule('0 0 * * *')
   .timeZone('UTC')
   .onRun(async () => {
     try {
@@ -29,8 +29,8 @@ export const updateCharacterDaily = functions.pubsub
         character: randomCharacter,
       })
 
-      console.log('✅ Character of the Day updated:', randomCharacter)
+      console.log('Character of the Day updated:', randomCharacter)
     } catch (error) {
-      console.error('❌ Failed to update Character of the Day:', error)
+      console.error('Failed to update Character of the Day:', error)
     }
   })

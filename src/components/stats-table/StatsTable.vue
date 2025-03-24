@@ -50,7 +50,7 @@ type UserStats = {
 }
 
 fullstackleStore.getStats(sessionStore.user as User).then((data: DocumentData) => {
-  userStats.value = data.fullstackleStats
+  userStats.value = data.gameStats.fullstackleStats
 })
 </script>
 

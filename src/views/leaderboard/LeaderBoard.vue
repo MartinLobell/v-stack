@@ -1,5 +1,5 @@
 <template>
-  <h1>Leaderboard</h1>
+  <h1>Fullstackle Leaderboard</h1>
   <div class="fs-leaderboard-container">
     <table class="fs-leaderboard-table">
       <thead>
@@ -66,10 +66,17 @@ type userRes = {
   email: string
   photoURL: string
   uid: string
-  fullstackleStats: {
-    wins: number
-    guesses: number
-    playedGames: number
+  gameStats: {
+    fullstackleStats: {
+      wins: number
+      guesses: number
+      playedGames: number
+    }
+    findErminStats: {
+      wins: number
+      avgTime: number
+      playedGames: number
+    }
   }
 }
 
@@ -79,10 +86,12 @@ fullstackleStore.getStats().then((data: DocumentData) => {
   const leaderboardUsers: LeaderboardUser[] = data.map((user: userRes) => ({
     displayName: user.displayName,
     photoURL: user.photoURL,
-    fullstackleStats: {
-      wins: user.fullstackleStats.wins,
-      guesses: user.fullstackleStats.guesses,
-      playedGames: user.fullstackleStats.playedGames,
+    gameStats: {
+      fullstackleStats: {
+        wins: user.gameStats.fullstackleStats.wins,
+        guesses: user.gameStats.fullstackleStats.guesses,
+        playedGames: user.gameStats.fullstackleStats.playedGames,
+      },
     },
   }))
   users.value = (leaderboardUsers || []).sort((a, b) => {

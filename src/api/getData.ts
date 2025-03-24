@@ -44,10 +44,17 @@ export const loginWithGoogle = async () => {
       email: result.user.email,
       displayName: result.user.displayName,
       photoURL: result.user.photoURL,
-      fullstackleStats: {
-        wins: 0,
-        guesses: 0,
-        playedGames: 0,
+      gameStats: {
+        fullstackleStats: {
+          wins: 0,
+          guesses: 0,
+          playedGames: 0,
+        },
+        findErminStats: {
+          playedGames: 0,
+          wins: 0,
+          avgTime: 0,
+        },
       },
     })
   }
