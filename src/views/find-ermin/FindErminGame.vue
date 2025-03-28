@@ -178,7 +178,6 @@ const handleClick = (event: MouseEvent) => {
     }
   }
   canvas {
-    border: 2px solid #333;
     cursor: pointer;
     width: 100vw;
     height: 100vh;
