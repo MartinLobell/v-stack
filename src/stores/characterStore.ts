@@ -47,6 +47,8 @@ export const useCharacterStore = defineStore('character', () => {
       throw new Error(`Character with name ${characterName} not found`)
     }
     guessedCharacters.value = [...guessedCharacters.value, character as Character]
+    // TODO: Either start using the filteredCharacters ref or
+    // remove it and start filtering out guessed players from the characters ref
   }
 
   const setDropdownChars = (matchChars: Character[]) => {

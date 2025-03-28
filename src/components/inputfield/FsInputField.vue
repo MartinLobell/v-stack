@@ -30,12 +30,29 @@
 import DropDown from '@/components/dropdown/DropDown.vue'
 import { useCharacterStore } from '@/stores/characterStore'
 import { useFullstackleStore } from '@/stores/fullstackleStore'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import type { Character } from '@/types/Character'
 const inputValue = ref('')
 const isOpen = ref(false)
 const characterStore = useCharacterStore()
 const fullstackleStore = useFullstackleStore()
+
+const emit = defineEmits<{
+  (event: 'setPlayed'): void
+}>()
+
+onMounted(() => {
+  const lastPlayDate = localStorage.getItem('lastFullstackleDate')
+  const currentDate = new Date().toDateString()
+  if (lastPlayDate !== currentDate) {
+    emit('setPlayed')
+  }
+  localStorage.setItem('lastFullstackleDate', currentDate)
+})
+
+defineProps<{
+  hasPlayed: boolean
+}>()
 
 const handleSubmit = (option: string | Event) => {
   if (typeof option === 'string') {

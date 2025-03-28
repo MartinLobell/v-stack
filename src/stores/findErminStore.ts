@@ -22,6 +22,11 @@ export const useFindErminStore = defineStore('findermin', () => {
           displayName: sessionStore.user.displayName,
           photoURL: sessionStore.user.photoURL,
           gameStats: {
+            fullstackleStats: {
+              wins: userData.gameStats.fullstackleStats?.wins,
+              guesses: userData.gameStats.fullstackleStats?.guesses,
+              playedGames: userData.gameStats.fullstackleStats?.playedGames,
+            },
             findErminStats: {
               wins: userData.gameStats.findErminStats?.wins + (won ? 1 : 0),
               avgTime: newAvgTime,

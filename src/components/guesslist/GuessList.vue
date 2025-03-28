@@ -1,7 +1,7 @@
 <template>
   <TurnoutModal
     won
-    v-if="openModal"
+    v-if="openModal && !hasPlayed"
     @close-modal="closeModal"
     :characterName="characterStore.charOfTheDay.name"
   />
@@ -37,6 +37,10 @@ const characterStore = useCharacterStore()
 const fullstackleStore = useFullstackleStore()
 const openModal = ref(false)
 
+defineProps<{
+  hasPlayed: boolean
+}>()
+
 const closeModal = () => {
   openModal.value = !openModal.value
 }
@@ -58,17 +62,6 @@ watch(
         openModal.value =
           latestGuess.name === characterStore.charOfTheDay.name || fullstackleStore.hasLost
       }, 1000)
-
-      // Check if the date has changed since the last play
-      const lastPlayDate = localStorage.getItem('lastPlayDate')
-      const currentDate = new Date().toDateString()
-      if (lastPlayDate !== currentDate) {
-        // Reset the guessed characters if the date has changed
-        characterStore.guessedCharacters = []
-        localStorage.setItem('guessedCharacters', JSON.stringify([]))
-      }
-      // Update the last play date in localStorage
-      localStorage.setItem('lastPlayDate', currentDate)
     }
   },
 )

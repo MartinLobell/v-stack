@@ -20,23 +20,23 @@
               :alt="user.displayName + 's profile image'"
             />{{ user.displayName }}
           </th>
-          <td>{{ user.fullstackleStats.playedGames }}</td>
-          <td>{{ user.fullstackleStats.guesses }}</td>
-          <td>{{ user.fullstackleStats.wins }}</td>
+          <td>{{ user.gameStats.fullstackleStats.playedGames }}</td>
+          <td>{{ user.gameStats.fullstackleStats.guesses }}</td>
+          <td>{{ user.gameStats.fullstackleStats.wins }}</td>
           <td class="underline">
             {{
-              (user.fullstackleStats.wins /
-                user.fullstackleStats.guesses /
-                user.fullstackleStats.playedGames) %
+              (user.gameStats.fullstackleStats.wins /
+                user.gameStats.fullstackleStats.guesses /
+                user.gameStats.fullstackleStats.playedGames) %
                 1 ===
               0
-                ? user.fullstackleStats.wins /
-                  user.fullstackleStats.guesses /
-                  user.fullstackleStats.playedGames
+                ? user.gameStats.fullstackleStats.wins /
+                  user.gameStats.fullstackleStats.guesses /
+                  user.gameStats.fullstackleStats.playedGames
                 : (
-                    user.fullstackleStats.wins /
-                    user.fullstackleStats.guesses /
-                    user.fullstackleStats.playedGames
+                    user.gameStats.fullstackleStats.wins /
+                    user.gameStats.fullstackleStats.guesses /
+                    user.gameStats.fullstackleStats.playedGames
                   ).toFixed(2)
             }}
           </td>
@@ -54,10 +54,17 @@ const fullstackleStore = useFullstackleStore()
 interface LeaderboardUser {
   displayName: string
   photoURL: string
-  fullstackleStats: {
-    wins: number
-    guesses: number
-    playedGames: number
+  gameStats: {
+    fullstackleStats: {
+      wins: number
+      guesses: number
+      playedGames: number
+    }
+    findErminStats: {
+      wins: number
+      avgTime: number
+      playedGames: number
+    }
   }
 }
 
@@ -96,9 +103,13 @@ fullstackleStore.getStats().then((data: DocumentData) => {
   }))
   users.value = (leaderboardUsers || []).sort((a, b) => {
     const aWinsPerGuesses =
-      a.fullstackleStats.wins / a.fullstackleStats.guesses / a.fullstackleStats.playedGames
+      a.gameStats.fullstackleStats.wins /
+      a.gameStats.fullstackleStats.guesses /
+      a.gameStats.fullstackleStats.playedGames
     const bWinsPerGuesses =
-      b.fullstackleStats.wins / b.fullstackleStats.guesses / b.fullstackleStats.playedGames
+      b.gameStats.fullstackleStats.wins /
+      b.gameStats.fullstackleStats.guesses /
+      b.gameStats.fullstackleStats.playedGames
     return bWinsPerGuesses - aWinsPerGuesses
   })
 })

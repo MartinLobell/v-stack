@@ -38,6 +38,11 @@ export const useFullstackleStore = defineStore('fullstackle', () => {
               guesses: (userData.gameStats.fullstackleStats?.guesses || 0) + newGuesses,
               playedGames: (userData.gameStats.fullstackleStats?.playedGames || 0) + 1,
             },
+            findErminStats: {
+              wins: userData.gameStats.findErminStats?.wins,
+              avgTime: userData.gameStats.findErminStats?.avgTime,
+              playedGames: userData.gameStats.findErminStats?.playedGames,
+            },
           },
         })
       }

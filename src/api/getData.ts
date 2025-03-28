@@ -23,7 +23,8 @@ export const getCharOfTheDay = async (): Promise<Character> => {
     const docRef = doc(db, 'dailyCharacter', 'current')
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
-      return docSnap.data() as Character
+      const char = docSnap.data()
+      return char.character as Character
     }
     throw new Error('Character of the day not found')
   } catch (error) {
@@ -46,14 +47,14 @@ export const loginWithGoogle = async () => {
       photoURL: result.user.photoURL,
       gameStats: {
         fullstackleStats: {
-          wins: 0,
-          guesses: 0,
-          playedGames: 0,
+          wins: Number(0),
+          guesses: Number(0),
+          playedGames: Number(0),
         },
         findErminStats: {
-          playedGames: 0,
-          wins: 0,
-          avgTime: 0,
+          playedGames: Number(0),
+          wins: Number(0),
+          avgTime: Number(0),
         },
       },
     })

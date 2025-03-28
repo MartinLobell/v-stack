@@ -1,9 +1,21 @@
 <template>
-  <h1>Find Ermin</h1>
-  <p>Ermin is hiding from work among these nice people.<br />Find him before the time runs out!</p>
-  <h2>Timer: {{ timer }}s.</h2>
-  <div class="container">
-    <canvas ref="canvas" width="600" height="600" @click="handleClick"></canvas>
+  <div class="text-box" :class="{ disabled: hasPlayed }">
+    <h1 v-if="!hasPlayed">Find Ermin</h1>
+    <h1 v-else>Ermin was found!</h1>
+    <p v-if="!hasPlayed">
+      Ermin is hiding from work among these nice people.<br />
+      Find him before the time runs out!
+    </p>
+    <p v-else>
+      Ermin has been found today and was forcefully<br />
+      brought back to his desk but come back tomorrow,<br />
+      he will probably hide again!
+    </p>
+    <h2 v-if="!hasPlayed">Timer: {{ timer }}s.</h2>
+    <h2 v-else>Your time: {{ timer }}s.</h2>
+  </div>
+  <div class="container" :class="{ disabled: hasPlayed }">
+    <canvas ref="canvas" @click="handleClick"></canvas>
   </div>
 </template>
 
@@ -15,7 +27,8 @@ const ctx = ref<CanvasRenderingContext2D | null>(null)
 const backgroundImages = ['/faces1.jpg', '/faces2.jpg']
 const faceImagePath = '/ermin2.PNG'
 const findErminStore = useFindErminStore()
-
+const hasPlayed = ref(false)
+const currentDate = new Date().toDateString()
 const timer = ref(0)
 let intervalId: number | null = null
 
@@ -33,10 +46,18 @@ const stopTimer = () => {
 }
 
 onMounted(() => {
+  const lastPlayDate = localStorage.getItem('lastFindErminDate')
+  if (lastPlayDate !== currentDate) {
+    hasPlayed.value = false
+    startTimer()
+    localStorage.setItem('lastFindErminDate', currentDate)
+  } else {
+    hasPlayed.value = true
+    alert('You already played!')
+  }
   if (canvas.value) {
     ctx.value = canvas.value.getContext('2d')
     drawImages(true)
-    startTimer()
   }
 })
 
@@ -100,39 +121,68 @@ watch(timer, (newVal: number) => {
 })
 
 const handleClick = (event: MouseEvent) => {
-  if (canvas.value) {
-    const rect = canvas.value.getBoundingClientRect()
-    const x = (event.clientX - rect.left) * (canvas.value.width / rect.width)
-    const y = (event.clientY - rect.top) * (canvas.value.height / rect.height)
+  console.log(hasPlayed.value)
+  if (!hasPlayed.value) {
+    if (canvas.value) {
+      const rect = canvas.value.getBoundingClientRect()
+      const x = (event.clientX - rect.left) * (canvas.value.width / rect.width)
+      const y = (event.clientY - rect.top) * (canvas.value.height / rect.height)
 
-    const { x: fx, y: fy, width, height } = faceOverlay.value
+      const { x: fx, y: fy, width, height } = faceOverlay.value
 
-    if (x >= fx && x <= fx + width && y >= fy && y <= fy + height) {
-      alert('You clicked the face!')
-      findErminStore.updatePlayerStats(timer.value, true)
-    } else {
-      alert('You missed the face!')
-      findErminStore.updatePlayerStats(timer.value, false)
+      if (x >= fx && x <= fx + width && y >= fy && y <= fy + height) {
+        alert('You clicked the face!')
+        findErminStore.updatePlayerStats(timer.value, true)
+      } else {
+        alert('You missed the face!')
+        findErminStore.updatePlayerStats(timer.value, false)
+      }
     }
+    stopTimer()
+    localStorage.setItem('lastFindErminDate', currentDate)
+    canvas.value!.style.pointerEvents = 'none'
+    drawImages(false)
+    hasPlayed.value = true
   }
-  stopTimer()
-  canvas.value!.style.pointerEvents = 'none'
-  drawImages(false)
 }
 </script>
 
 <style scoped lang="scss">
-h1,
-h2,
-p {
-  margin-bottom: 0;
+.text-box {
+  position: absolute;
+  margin-top: 10px;
+  z-index: 1;
+  color: #fff;
+  &.disabled {
+    padding: 2rem;
+    background-color: #fff;
+    color: #000;
+    border-radius: 20px;
+    opacity: 0.7;
+  }
+  h1 {
+    margin: 0;
+  }
+  h2,
+  p {
+    margin-bottom: 0;
+    font-weight: 600;
+  }
 }
 .container {
   text-align: center;
-  margin-top: 20px;
+  &.disabled {
+    pointer-events: none;
+    canvas {
+      opacity: 0.7;
+    }
+  }
   canvas {
     border: 2px solid #333;
     cursor: pointer;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
   }
 }
 </style>
