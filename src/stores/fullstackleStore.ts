@@ -14,10 +14,12 @@ export const useFullstackleStore = defineStore('fullstackle', () => {
     if (newGuesses >= 4) {
       updatePlayerStats(newGuesses, won)
       hasLost.value = true
+      localStorage.setItem('hasPlayed', 'true')
     }
     if (won === true) {
       updatePlayerStats(newGuesses, won)
       hasWon.value = won
+      localStorage.setItem('hasPlayed', 'true')
     }
   }
 

@@ -37,22 +37,15 @@ const isOpen = ref(false)
 const characterStore = useCharacterStore()
 const fullstackleStore = useFullstackleStore()
 
-const emit = defineEmits<{
-  (event: 'setPlayed'): void
-}>()
-
 onMounted(() => {
   const lastPlayDate = localStorage.getItem('lastFullstackleDate')
   const currentDate = new Date().toDateString()
   if (lastPlayDate !== currentDate) {
-    emit('setPlayed')
+    fullstackleStore.hasLost = false
+    fullstackleStore.hasWon = false
   }
   localStorage.setItem('lastFullstackleDate', currentDate)
 })
-
-defineProps<{
-  hasPlayed: boolean
-}>()
 
 const handleSubmit = (option: string | Event) => {
   if (typeof option === 'string') {

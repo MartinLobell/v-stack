@@ -3,6 +3,8 @@ import { auth } from '@/lib/firebase'
 import { onAuthStateChanged, type User } from 'firebase/auth'
 import { ref } from 'vue'
 import { loginWithGoogle, signOutWithGoogle } from '@/api/getData'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 export const useSessionStore = defineStore('userSession', () => {
   const user = ref<User | null>(null)
@@ -16,7 +18,7 @@ export const useSessionStore = defineStore('userSession', () => {
   }
 
   const logout = async () => {
-    alert('Hate the player, not the game.')
+    toast('Hate the player, not the game.')
     signOutWithGoogle()
     user.value = null
   }

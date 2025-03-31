@@ -15,13 +15,15 @@
     <h2 v-else>Your time: {{ timer }}s.</h2>
   </div>
   <div class="container" :class="{ disabled: hasPlayed }">
-    <canvas ref="canvas" @click="handleClick"></canvas>
+    <canvas ref="canvas" height="800" width="800" @click="handleClick"></canvas>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { useFindErminStore } from '@/stores/findErminStore'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 const canvas = ref<HTMLCanvasElement | null>(null)
 const ctx = ref<CanvasRenderingContext2D | null>(null)
 const backgroundImages = ['/faces1.jpg', '/faces2.jpg']
@@ -53,7 +55,6 @@ onMounted(() => {
     localStorage.setItem('lastFindErminDate', currentDate)
   } else {
     hasPlayed.value = true
-    alert('You already played!')
   }
   if (canvas.value) {
     ctx.value = canvas.value.getContext('2d')
@@ -64,8 +65,8 @@ onMounted(() => {
 const faceOverlay = ref({
   x: 150,
   y: 200,
-  width: 70,
-  height: 80,
+  width: 90,
+  height: 100,
 })
 
 const randomBg = ref('')
@@ -115,7 +116,7 @@ watch(timer, (newVal: number) => {
       canvas.value.style.pointerEvents = 'none'
     }
     drawImages(false)
-    alert('You ran out of time!')
+    toast.info('You ran out of time!', { autoClose: 2000 })
     findErminStore.updatePlayerStats(timer.value, false)
   }
 })
@@ -131,10 +132,10 @@ const handleClick = (event: MouseEvent) => {
       const { x: fx, y: fy, width, height } = faceOverlay.value
 
       if (x >= fx && x <= fx + width && y >= fy && y <= fy + height) {
-        alert('You clicked the face!')
+        toast.success('You clicked the face!', { autoClose: 2000 })
         findErminStore.updatePlayerStats(timer.value, true)
       } else {
-        alert('You missed the face!')
+        toast('You missed the face!', { autoClose: 2000 })
         findErminStore.updatePlayerStats(timer.value, false)
       }
     }
@@ -149,15 +150,8 @@ const handleClick = (event: MouseEvent) => {
 
 <style scoped lang="scss">
 .text-box {
-  position: absolute;
   margin-top: 10px;
-  z-index: 1;
-  color: #fff;
   &.disabled {
-    padding: 2rem;
-    background-color: #fff;
-    color: #000;
-    border-radius: 20px;
     opacity: 0.7;
   }
   h1 {
@@ -167,6 +161,9 @@ const handleClick = (event: MouseEvent) => {
   p {
     margin-bottom: 0;
     font-weight: 600;
+  }
+  h2 {
+    margin: 10px 0;
   }
 }
 .container {
@@ -179,9 +176,6 @@ const handleClick = (event: MouseEvent) => {
   }
   canvas {
     cursor: pointer;
-    width: 100vw;
-    height: 100vh;
-    position: relative;
   }
 }
 </style>

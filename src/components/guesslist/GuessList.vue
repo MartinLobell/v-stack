@@ -1,7 +1,7 @@
 <template>
   <TurnoutModal
     won
-    v-if="openModal && !hasPlayed"
+    v-if="openModal"
     @close-modal="closeModal"
     :characterName="characterStore.charOfTheDay.name"
   />
@@ -37,31 +37,34 @@ const characterStore = useCharacterStore()
 const fullstackleStore = useFullstackleStore()
 const openModal = ref(false)
 
-defineProps<{
-  hasPlayed: boolean
-}>()
-
 const closeModal = () => {
-  openModal.value = !openModal.value
+  openModal.value = false
 }
 
 watch(
   () => characterStore.guessedCharacters as Character[],
   (newCharArr: Character[]) => {
     const latestGuess: Character = newCharArr[newCharArr.length - 1]
-    if (newCharArr.length > 0) {
-      fullstackleStore.checkTurnout(
-        latestGuess.name === characterStore.charOfTheDay.name,
-        newCharArr.length,
-      )
+    const lastPlayDate = localStorage.getItem('lastFullstackleDate')
+    const currentDate = new Date().toDateString()
+
+    // If a character has been added and the user hasn't played today already, check outcome
+    if (newCharArr.length > 0 && localStorage.getItem('hasPlayed') !== 'true') {
+      if (lastPlayDate === currentDate) {
+        fullstackleStore.checkTurnout(
+          latestGuess.name === characterStore.charOfTheDay.name,
+          newCharArr.length,
+        )
+        // If the user has won or run out of chances, show the modal
+        setTimeout(() => {
+          openModal.value =
+            latestGuess.name === characterStore.charOfTheDay.name || fullstackleStore.hasLost
+        }, 1000)
+      } else {
+        localStorage.setItem('hasPlayed', 'false')
+      }
       // Save the guessed characters to localStorage
       localStorage.setItem('guessedCharacters', JSON.stringify(newCharArr))
-
-      // Open the modal if the guess is correct or the player has lost
-      setTimeout(() => {
-        openModal.value =
-          latestGuess.name === characterStore.charOfTheDay.name || fullstackleStore.hasLost
-      }, 1000)
     }
   },
 )
