@@ -4,13 +4,13 @@
       <template v-if="options.length > 0">
         <li
           v-for="option in options"
-          :key="option"
+          :key="option.name"
           tabindex="0"
           class="fs-dropdown-item fs-dropdown-item-option"
-          @click="onSelect(option)"
-          @keydown.enter="onSelect(option)"
+          @click="onSelect(option.name)"
+          @keydown.enter="onSelect(option.name)"
         >
-          {{ option }}
+          {{ option.name }}
         </li>
       </template>
       <template v-else>
@@ -21,8 +21,9 @@
 </template>
 
 <script setup lang="ts">
+import type { Character } from '@/types/Character'
 defineProps<{
-  options: string[]
+  options: Character[]
   onSelect: (option: string) => void
 }>()
 </script>

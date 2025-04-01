@@ -1,25 +1,11 @@
 <template>
   <form class="fs-fullstackle-form" @submit.prevent="handleSubmit">
     <div class="fs-fullstackle-form-field">
-      <input
-        class="fs-input"
-        :disabled="fullstackleStore.hasWon || fullstackleStore.hasLost"
-        type="text"
-        v-model="inputValue"
-        @input="
-          (event) => {
-            if (event.target) {
-              inputValue = (event.target as HTMLInputElement).value
-              filterOptions()
-            }
-          }
-        "
-        @keydown.enter="handleSubmit"
-      />
+      <input id="fs-input" type="text" v-model="inputValue" @keydown.enter="handleSubmit" />
     </div>
     <DropDown
       v-if="isOpen"
-      :options="characterStore.filteredCharacters"
+      :options="characterOptions"
       @select="handleSubmit"
       @click-outside="isOpen = false"
     />
@@ -29,55 +15,42 @@
 <script setup lang="ts">
 import DropDown from '@/components/dropdown/DropDown.vue'
 import { useCharacterStore } from '@/stores/characterStore'
-import { useFullstackleStore } from '@/stores/fullstackleStore'
-import { ref, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import type { Character } from '@/types/Character'
 const inputValue = ref('')
-const isOpen = ref(false)
 const characterStore = useCharacterStore()
-const fullstackleStore = useFullstackleStore()
+const isOpen = computed(() => inputValue.value.length > 1)
+// TODO: Make disabled work based on localStorage hasPlayed
+// const hasPlayed = computed(() => {
+//   if (typeof window !== 'undefined' && window.localStorage) {
+//     return !!window.localStorage.getItem('hasPlayed')
+//   }
+//   return false
+// })
 
-onMounted(() => {
-  const lastPlayDate = localStorage.getItem('lastFullstackleDate')
-  const currentDate = new Date().toDateString()
-  if (lastPlayDate !== currentDate) {
-    fullstackleStore.hasLost = false
-    fullstackleStore.hasWon = false
-  }
-  localStorage.setItem('lastFullstackleDate', currentDate)
-})
+// Filter characters based on inputValue and exclude guessed characters
+const characterOptions = computed(() =>
+  characterStore.characters.filter(
+    (character: Character) =>
+      character.name.toLowerCase().includes(inputValue.value.toLowerCase()) &&
+      !characterStore.guessedCharacters.some(
+        (guessedCharacter) => guessedCharacter.name === character.name,
+      ),
+  ),
+)
 
-const handleSubmit = (option: string | Event) => {
-  if (typeof option === 'string') {
-    characterStore.addGuessedCharacter(option)
+// Handle chosen character
+const handleSubmit = (event: Event | string) => {
+  if (typeof event === 'string') {
+    characterStore.addGuessedCharacter(event)
   } else {
-    option.preventDefault()
-    const inputOption = (option.target as HTMLFormElement).querySelector('input')?.value
-    if (inputOption !== undefined) {
-      characterStore.addGuessedCharacter(inputOption)
-    } else {
-      characterStore.addGuessedCharacter(inputValue.value)
+    event.preventDefault()
+    if (inputValue.value.trim()) {
+      characterStore.addGuessedCharacter(inputValue.value.trim())
     }
   }
-  isOpen.value = false
   inputValue.value = ''
-  const inputElement = document.querySelector('.fs-input') as HTMLInputElement
-  if (inputElement) {
-    inputElement.focus()
-  }
-}
-
-const filterOptions = () => {
-  const matchingCharacters = characterStore.characters.filter((character: Character) =>
-    character.name.toLowerCase().includes(inputValue.value.toLowerCase()),
-  )
-  characterStore.setDropdownChars(matchingCharacters)
-  if (inputValue.value === '') {
-    isOpen.value = false
-  }
-  if (inputValue.value.length < 2) {
-    isOpen.value = true
-  }
+  document.getElementById('fs-input')?.focus()
 }
 </script>
 
@@ -88,11 +61,16 @@ const filterOptions = () => {
   &-field {
     display: flex;
     flex-direction: row;
-    .fs-input {
+    #fs-input {
       flex-grow: 2;
       padding: 0.5rem;
       font-size: 16px;
       font-weight: 600;
+
+      &.disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
 
       &:focus {
         outline: #000 solid 2px;

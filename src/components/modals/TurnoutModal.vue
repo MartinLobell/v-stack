@@ -3,15 +3,14 @@
     <div class="fs-modal" @click.stop>
       <div>
         <h2 class="fs-modal-title">
-          {{ fullstackleStore.hasWon ? 'You won!' : 'You lost...' }}
+          {{ hasWon ? 'You won!' : 'You lost...' }}
         </h2>
         <p class="fs-modal-text">
-          You have {{ !fullstackleStore.hasWon ? 'not successfully ' : '' }}guessed the character of
-          the day!
+          You have {{ !hasWon ? 'not successfully ' : '' }}guessed the character of the day!
         </p>
         <h3>It was {{ characterName }}!</h3>
       </div>
-      <StatsTable v-if="fullstackleStore.hasWon || fullstackleStore.hasLost" />
+      <StatsTable />
 
       <FsButton
         id="fs-turnout-modal-button"
@@ -27,16 +26,15 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useFullstackleStore } from '@/stores/fullstackleStore'
 import StatsTable from '@/components/stats-table/StatsTable.vue'
 import FsButton from '@/components/button/FsButton.vue'
 import { restrainFocus } from '@/composables/modalTab'
+const emit = defineEmits(['close-modal'])
 
 defineProps<{
   characterName: string
+  hasWon: boolean
 }>()
-const fullstackleStore = useFullstackleStore()
-const emit = defineEmits(['close-modal'])
 
 const emitCloseModal = () => {
   emit('close-modal')

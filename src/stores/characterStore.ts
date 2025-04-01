@@ -6,7 +6,6 @@ import { fetchChars, getCharOfTheDay } from '@/api/getData'
 
 export const useCharacterStore = defineStore('character', () => {
   const characters = ref<Character[]>([])
-  const filteredCharacters = ref([''])
   const charOfTheDay = ref<Character>({} as Character)
   const loading = ref(false)
   const error = ref(null)
@@ -47,18 +46,10 @@ export const useCharacterStore = defineStore('character', () => {
       throw new Error(`Character with name ${characterName} not found`)
     }
     guessedCharacters.value = [...guessedCharacters.value, character as Character]
-    // TODO: Either start using the filteredCharacters ref or
-    // remove it and start filtering out guessed players from the characters ref
-  }
-
-  const setDropdownChars = (matchChars: Character[]) => {
-    filteredCharacters.value = matchChars.map((char) => char.name)
   }
 
   return {
     characters,
-    filteredCharacters,
-    setDropdownChars,
     charOfTheDay,
     loading,
     error,
