@@ -15,11 +15,11 @@ import SkipToMain from './components/skip-to-main/SkipToMain.vue'
 
 <style scoped lang="scss">
 .fs-main {
-  margin: 59.2px 8rem 0 8rem;
+  margin: 60px 8rem 0 8rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  min-height: 100vh;
+  min-height: 95vh;
 }
 </style>

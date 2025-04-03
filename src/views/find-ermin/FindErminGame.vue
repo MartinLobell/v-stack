@@ -122,7 +122,6 @@ watch(timer, (newVal: number) => {
 })
 
 const handleClick = (event: MouseEvent) => {
-  console.log(hasPlayed.value)
   if (!hasPlayed.value) {
     if (canvas.value) {
       const rect = canvas.value.getBoundingClientRect()

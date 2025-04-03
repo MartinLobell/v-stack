@@ -15,6 +15,7 @@ import NavLink from '../nav-link/NavLink.vue'
 <style scoped lang="scss">
 .fs-header {
   width: 100vw;
+  height: 60px;
   top: 0;
   display: flex;
   flex-direction: row;
@@ -23,7 +24,7 @@ import NavLink from '../nav-link/NavLink.vue'
   z-index: 1;
   background-color: #f3f3f3;
   position: absolute;
-  padding: 0 30px;
+  padding: 0 0 0 30px;
 
   .fs-site-title {
     display: flex;

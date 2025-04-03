@@ -27,5 +27,9 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  p {
+    margin-top: 0;
+  }
 }
 </style>

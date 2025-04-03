@@ -1,11 +1,9 @@
 <template>
-  <router-link
-    :to="props.href"
-    class="nav-link"
-    :class="[{ active: isActive }, { logo: props.logo }]"
-  >
-    <slot></slot>
-  </router-link>
+  <li :class="{ active: isActive }">
+    <router-link :to="props.href" class="nav-link" :class="[{ logo: props.logo }]">
+      <slot></slot>
+    </router-link>
+  </li>
 </template>
 
 <script setup lang="ts">
@@ -36,29 +34,38 @@ watch(
 </script>
 
 <style scoped lang="scss">
-.nav-link {
+li {
+  height: 100%;
+  width: 120px;
   text-decoration: none;
-  color: #000;
-  padding: 4px;
-  &:focus {
-    outline: #000 solid 2px;
-    border: 2px solid #fff;
-    padding: 0;
-  }
-  &:hover {
-    transition: 0.2s;
-    color: rgb(255, 204, 0);
-  }
-  &.logo {
-    font-size: 24px !important;
-    &:hover {
-      color: #000;
-    }
-  }
+  display: flex;
   &.active {
-    color: rgb(255, 204, 0);
-    text-decoration: underline;
+    background-color: rgb(255, 204, 0);
+    text-decoration: none;
     font-weight: 700;
+  }
+  a.nav-link {
+    height: 100%;
+    width: 100%;
+    padding: 0 10px;
+    text-decoration: none;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:focus {
+      outline: #000 solid 2px;
+    }
+    &:hover {
+      text-decoration: underline;
+    }
+    &.logo {
+      font-size: 24px !important;
+      text-decoration: none;
+      &:hover {
+        color: #000;
+      }
+    }
   }
 }
 </style>
