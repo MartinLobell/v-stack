@@ -2,6 +2,8 @@ import { db, auth } from '../lib/firebase'
 import { collection, getDocs, doc, getDoc, setDoc } from 'firebase/firestore'
 import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import type { Character } from '../types/Character'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 export const fetchChars = async (): Promise<Character[]> => {
   const characters: Character[] = []
@@ -10,12 +12,11 @@ export const fetchChars = async (): Promise<Character[]> => {
     querySnapshot.forEach((doc) => {
       characters.push(doc.data() as Character)
     })
-    return characters
-  } catch (error) {
-    console.error('Error fetching characters:', error)
-    // TODO: send errors
-    throw new Error('Failed to fetch characters')
+  } catch (error: unknown) {
+    console.error('Error fetching characters: ', error)
+    toast.error('Failed to fetch characters')
   }
+  return characters
 }
 
 export const getCharOfTheDay = async (): Promise<Character> => {
@@ -26,11 +27,11 @@ export const getCharOfTheDay = async (): Promise<Character> => {
       const char = docSnap.data()
       return char.character as Character
     }
-    throw new Error('Character of the day not found')
   } catch (error) {
     console.error('Error fetching character of the day:', error)
-    throw new Error('Failed to fetch character of the day')
+    toast.error('Failed to fetch character of the day')
   }
+  return {} as Character
 }
 
 export const loginWithGoogle = async () => {

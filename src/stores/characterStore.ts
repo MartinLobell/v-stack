@@ -3,12 +3,13 @@ import { defineStore } from 'pinia'
 import type { Character } from '@/types/Character'
 import { onMounted } from 'vue'
 import { fetchChars, getCharOfTheDay } from '@/api/getData'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 export const useCharacterStore = defineStore('character', () => {
   const characters = ref<Character[]>([])
   const charOfTheDay = ref<Character>({} as Character)
   const loading = ref(false)
-  const error = ref(null)
   const guessedCharacters = ref([] as Character[])
 
   onMounted(() => {
@@ -24,9 +25,9 @@ export const useCharacterStore = defineStore('character', () => {
         const charactersData: Character[] = await fetchChars()
         characters.value = charactersData
         charOfTheDay.value = await getCharOfTheDay()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: object[] | any) {
-        error.value = err
+      } catch (err: unknown) {
+        console.error('Failed to fetch characters', err)
+        toast.error('Failed to fetch characters')
       } finally {
         loading.value = false
       }
@@ -43,7 +44,7 @@ export const useCharacterStore = defineStore('character', () => {
       (char) => (char as Character).name.toLowerCase() === characterName.toLowerCase(),
     )
     if (!character) {
-      throw new Error(`Character with name ${characterName} not found`)
+      toast.error(`Character with name ${characterName} not found`)
     }
     guessedCharacters.value = [...guessedCharacters.value, character as Character]
   }
@@ -52,7 +53,6 @@ export const useCharacterStore = defineStore('character', () => {
     characters,
     charOfTheDay,
     loading,
-    error,
     addGuessedCharacter,
     guessedCharacters,
   }

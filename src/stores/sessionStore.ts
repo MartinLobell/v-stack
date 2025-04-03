@@ -14,6 +14,7 @@ export const useSessionStore = defineStore('userSession', () => {
       loginWithGoogle()
     } catch (error) {
       console.error('Google Sign-In Error:', error)
+      toast.error('Failed to sign in with Google')
     }
   }
 

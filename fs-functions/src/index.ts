@@ -32,5 +32,6 @@ export const updateCharacterDaily = functions.pubsub
       console.log('Character of the Day updated:', randomCharacter)
     } catch (error) {
       console.error('Failed to update Character of the Day:', error)
+      throw new Error('Failed to update Character of the Day')
     }
   })

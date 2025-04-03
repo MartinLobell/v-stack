@@ -1,7 +1,13 @@
 <template>
   <form class="fs-fullstackle-form" @submit.prevent="handleSubmit">
     <div class="fs-fullstackle-form-field">
-      <input id="fs-input" type="text" v-model="inputValue" @keydown.enter="handleSubmit" />
+      <input
+        id="fs-input"
+        type="text"
+        :disabled="fullstackleStore.hasPlayed"
+        v-model="inputValue"
+        @keydown.enter="handleSubmit"
+      />
     </div>
     <DropDown
       v-if="isOpen"
@@ -15,18 +21,13 @@
 <script setup lang="ts">
 import DropDown from '@/components/dropdown/DropDown.vue'
 import { useCharacterStore } from '@/stores/characterStore'
+import { useFullstackleStore } from '@/stores/fullstackleStore'
 import { ref, computed } from 'vue'
 import type { Character } from '@/types/Character'
 const inputValue = ref('')
 const characterStore = useCharacterStore()
+const fullstackleStore = useFullstackleStore()
 const isOpen = computed(() => inputValue.value.length > 1)
-// TODO: Make disabled work based on localStorage hasPlayed
-// const hasPlayed = computed(() => {
-//   if (typeof window !== 'undefined' && window.localStorage) {
-//     return !!window.localStorage.getItem('hasPlayed')
-//   }
-//   return false
-// })
 
 // Filter characters based on inputValue and exclude guessed characters
 const characterOptions = computed(() =>

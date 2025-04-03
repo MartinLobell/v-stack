@@ -3,15 +3,35 @@ import { useSessionStore } from './sessionStore'
 import { doc, setDoc, getDoc, getDocs, collection } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import type { User } from 'firebase/auth'
+import { ref } from 'vue'
 
 export const useFullstackleStore = defineStore('fullstackle', () => {
   const sessionStore = useSessionStore()
+  const hasPlayed = ref(false)
 
-  const updateGame = async (won: boolean, newGuesses: number) => {
-    updatePlayerStats(newGuesses, won)
-    localStorage.setItem('hasPlayed', 'true')
+  const checkGameStatus = () => {
+    const lastPlayDate = localStorage.getItem('lastFullstackleDate')
+    const currentDate = new Date().toDateString()
+
+    // If the user hasn't played today, start a new game session
+    if (currentDate !== lastPlayDate) {
+      localStorage.setItem('lastFullstackleDate', currentDate)
+      localStorage.setItem('hasPlayedFullstackle', 'false')
+      hasPlayed.value = false
+      localStorage.setItem('guessedCharacters', JSON.stringify([]))
+    } else {
+      hasPlayed.value = true
+    }
   }
 
+  // Send updated stats and set the game as played
+  const updateGame = async (won: boolean, newGuesses: number) => {
+    updatePlayerStats(newGuesses, won)
+    localStorage.setItem('hasPlayedFullstackle', 'true')
+    hasPlayed.value = true
+  }
+
+  // Update the stats object of the specified user in the database
   const updatePlayerStats = async (newGuesses: number, won: boolean) => {
     if (sessionStore.user) {
       const userDoc = doc(db, 'users', sessionStore.user.uid)
@@ -56,5 +76,5 @@ export const useFullstackleStore = defineStore('fullstackle', () => {
     return usersList
   }
 
-  return { updateGame, getStats }
+  return { hasPlayed, checkGameStatus, updateGame, getStats }
 })

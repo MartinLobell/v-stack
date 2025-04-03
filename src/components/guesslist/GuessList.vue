@@ -46,23 +46,14 @@ watch(
   () => characterStore.guessedCharacters as Character[],
   (newCharArr: Character[]) => {
     const latestGuess: Character = newCharArr[newCharArr.length - 1]
-    const lastPlayDate = localStorage.getItem('lastFullstackleDate')
-    const currentDate = new Date().toDateString()
 
     // If a character has been added and the user hasn't played today already, check outcome
-    if (newCharArr.length > 0 && localStorage.getItem('hasPlayed') !== 'true') {
-      if (
-        lastPlayDate !== currentDate &&
-        (newCharArr.length >= 4 || latestGuess.name === characterStore.charOfTheDay.name)
-      ) {
-        fullstackleStore.updateGame(
-          latestGuess.name === characterStore.charOfTheDay.name,
-          newCharArr.length,
-        )
-
+    if (newCharArr.length > 0 && localStorage.getItem('hasPlayedFullstackle') !== 'true') {
+      if (newCharArr.length >= 4 || latestGuess.name === characterStore.charOfTheDay.name) {
         if (latestGuess.name === characterStore.charOfTheDay.name) hasWon.value = true
+        fullstackleStore.updateGame(hasWon.value, newCharArr.length)
 
-        // If the user has won or run out of chances, show the modal
+        // If the user has won or run out of chances, open the modal
         setTimeout(() => {
           openModal.value =
             latestGuess.name === characterStore.charOfTheDay.name || newCharArr.length >= 4

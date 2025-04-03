@@ -12,7 +12,14 @@
 import InputField from '@/components/inputfield/FsInputField.vue'
 import GuessList from '@/components/guesslist/GuessList.vue'
 import { useSessionStore } from '@/stores/sessionStore'
+import { onMounted } from 'vue'
+import { useFullstackleStore } from '@/stores/fullstackleStore'
 const sessionStore = useSessionStore()
+const fullstackleStore = useFullstackleStore()
+
+onMounted(() => {
+  fullstackleStore.checkGameStatus()
+})
 </script>
 
 <style scoped lang="scss">
