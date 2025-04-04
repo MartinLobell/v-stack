@@ -9,7 +9,6 @@
     <td
       :class="[
         'fs-tabledata',
-        'fs-number-data',
         { correct_attribute: character.birthYear === charOfTheDay.birthYear },
       ]"
     >
@@ -32,13 +31,7 @@
     >
       {{ character.hairColour }}
     </td>
-    <td
-      :class="[
-        'fs-tabledata',
-        'fs-number-data',
-        { correct_attribute: character.height === charOfTheDay.height },
-      ]"
-    >
+    <td :class="['fs-tabledata', { correct_attribute: character.height === charOfTheDay.height }]">
       {{ character.height }}cm
       <span>
         {{ character.height > charOfTheDay.height ? '&#10507;' : '' }}
@@ -66,10 +59,6 @@ defineProps<{
     width: calc(100% / var(--column-count));
     overflow: hidden;
     white-space: nowrap;
-    &.fs-number-data {
-      display: flex;
-      justify-content: space-between;
-    }
     &.correct_attribute {
       background-color: rgb(139, 170, 0);
     }

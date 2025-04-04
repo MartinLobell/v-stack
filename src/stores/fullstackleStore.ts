@@ -8,13 +8,16 @@ import { ref } from 'vue'
 export const useFullstackleStore = defineStore('fullstackle', () => {
   const sessionStore = useSessionStore()
   const hasPlayed = ref(false)
+  const currentDate = new Date().toDateString()
+
+  const checkIfPlayedToday = () => {
+    const lastPlayDate = localStorage.getItem('lastFullstackleDate')
+    return currentDate === lastPlayDate
+  }
 
   const checkGameStatus = () => {
-    const lastPlayDate = localStorage.getItem('lastFullstackleDate')
-    const currentDate = new Date().toDateString()
-
     // If the user hasn't played today, start a new game session
-    if (currentDate !== lastPlayDate) {
+    if (checkIfPlayedToday()) {
       localStorage.setItem('lastFullstackleDate', currentDate)
       localStorage.setItem('hasPlayedFullstackle', 'false')
       hasPlayed.value = false
@@ -76,5 +79,5 @@ export const useFullstackleStore = defineStore('fullstackle', () => {
     return usersList
   }
 
-  return { hasPlayed, checkGameStatus, updateGame, getStats }
+  return { checkIfPlayedToday, hasPlayed, checkGameStatus, updateGame, getStats }
 })

@@ -5,14 +5,20 @@ import { onMounted } from 'vue'
 import { fetchChars, getCharOfTheDay } from '@/api/getData'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
+import { useFullstackleStore } from './fullstackleStore'
 
 export const useCharacterStore = defineStore('character', () => {
+  const fullstackleStore = useFullstackleStore()
   const characters = ref<Character[]>([])
   const charOfTheDay = ref<Character>({} as Character)
   const loading = ref(false)
   const guessedCharacters = ref([] as Character[])
 
   onMounted(() => {
+    if (fullstackleStore.checkIfPlayedToday()) {
+      localStorage.setItem('guessedCharacters', JSON.stringify([]))
+    }
+
     const storedGuessedCharacters = localStorage.getItem('guessedCharacters')
     if (storedGuessedCharacters) {
       guessedCharacters.value = JSON.parse(storedGuessedCharacters)
