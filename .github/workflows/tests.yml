@@ -9,8 +9,7 @@ on:
       - 'bug/*'
   pull_request:
     branches:
-      - master # Run when PR targets master
-
+      - main
 jobs:
   test:
     runs-on: ubuntu-latest
