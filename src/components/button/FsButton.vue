@@ -3,7 +3,7 @@
     :type="props.type"
     :disabled="props.disabled"
     @click="
-      props.onClick
+      props.onClick && !props.disabled
         ? props.onClick()
         : () => {
             return
