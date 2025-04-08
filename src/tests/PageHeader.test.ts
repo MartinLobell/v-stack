@@ -4,13 +4,15 @@ import { test, expect, vi } from 'vitest'
 import '@testing-library/jest-dom'
 
 vi.stubGlobal('firebase/app', {
-  initializeApp: vi.fn(() => ({
-    auth: vi.fn(),
-    firestore: vi.fn(),
-  })),
-  auth: vi.fn(),
-  firestore: vi.fn(),
+  initializeApp: vi.fn(() => ({})),
   getApps: vi.fn(() => []),
+  getApp: vi.fn(() => ({})),
+})
+vi.stubGlobal('firebase/auth', {
+  getAuth: vi.fn(() => ({})),
+})
+vi.stubGlobal('firebase/firestore', {
+  getFirestore: vi.fn(() => ({})),
 })
 
 test('renders header component', () => {
