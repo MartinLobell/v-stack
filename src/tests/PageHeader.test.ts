@@ -3,17 +3,17 @@ import PageHeader from '@/components/header/PageHeader.vue'
 import { test, expect, vi } from 'vitest'
 import '@testing-library/jest-dom'
 
-vi.stubGlobal('firebase/app', {
+vi.mock('firebase/app', () => ({
   initializeApp: vi.fn(() => ({})),
   getApps: vi.fn(() => []),
   getApp: vi.fn(() => ({})),
-})
-vi.stubGlobal('firebase/auth', {
+}))
+vi.mock('firebase/auth', () => ({
   getAuth: vi.fn(() => ({})),
-})
-vi.stubGlobal('firebase/firestore', {
+}))
+vi.mock('firebase/firestore', () => ({
   getFirestore: vi.fn(() => ({})),
-})
+}))
 
 test('renders header component', () => {
   const {} = render(PageHeader, {
