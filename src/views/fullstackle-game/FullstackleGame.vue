@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import InputField from '@/components/inputfield/FsInputField.vue'
+import InputField from '@/components/inputfields/FsInputField.vue'
 import GuessList from '@/components/guesslist/GuessList.vue'
 import { useSessionStore } from '@/stores/sessionStore'
 import { onMounted } from 'vue'

@@ -4,5 +4,5 @@ export interface Character {
   birthYear: number
   hometown: string
   hairColour: string
-  height: string
+  height: number
 }
